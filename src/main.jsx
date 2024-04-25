@@ -4,8 +4,7 @@ import App from "./App.jsx";
 import "./index.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Home from "./components/Pages/Home.jsx";
-import Signup from "./components/Pages/Signup.jsx";
-import Login from "./components/Pages/Login.jsx";
+import Auth from "./components/Pages/Auth.jsx";
 import Watch from "./components/Pages/Watch.jsx";
 import Channel from "./components/Pages/Channel.jsx";
 import Videos from "./components/Pages/Videos.jsx";
@@ -27,12 +26,8 @@ const appRouter = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/signin",
-        element: <Login />,
-      },
-      {
-        path: "/signup",
-        element: <Signup />,
+        path: "/auth",
+        element: <Auth />,
       },
       {
         path: "/watch",

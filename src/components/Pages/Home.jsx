@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
+import { BACKEND_URL_PREFIX } from "../../constants";
 
 const Home = () => {
   const [videos, setVideos] = useState([]);
 
   const fetchVideos = async () => {
-    const data = await fetch(`http://localhost:8000/api/v1/videos/getAll`);
+    const data = await fetch(`${BACKEND_URL_PREFIX}videos/getAll`);
     const res = await data.json();
     console.log(res);
     setVideos(res.data.videos);
