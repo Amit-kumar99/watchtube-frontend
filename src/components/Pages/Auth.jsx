@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { BACKEND_URL_PREFIX } from "../../constants";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Auth = () => {
+  const navigate = useNavigate();
   const [isSigninForm, setIsSigninForm] = useState(true);
   const [fullName, setFullName] = useState("");
   const [username, setUsername] = useState("");
@@ -14,18 +17,23 @@ const Auth = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSignin = async () => {
-    const data = await fetch(`${BACKEND_URL_PREFIX}/users/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+    const data = await axios.post(
+      `${BACKEND_URL_PREFIX}/users/login`,
+      {
         username,
         password,
-      }),
-    });
+      },
+      {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     const res = await data.json();
-    console.log(res);
+    if (res.statusCode === 200) {
+      navigate("/");
+    }
   };
 
   const handleSignup = async () => {
@@ -42,7 +50,9 @@ const Auth = () => {
       body: formData,
     });
     const res = await data.json();
-    console.log(res);
+    if (res.statusCode === 200) {
+      setIsSigninForm(true);
+    }
   };
 
   const handleAvatarChange = (e) => {
