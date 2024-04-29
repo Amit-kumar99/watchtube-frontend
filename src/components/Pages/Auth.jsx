@@ -17,7 +17,7 @@ const Auth = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSignin = async () => {
-    const data = await axios.post(
+    const res = await axios.post(
       `${BACKEND_URL_PREFIX}/users/login`,
       {
         username,
@@ -30,8 +30,8 @@ const Auth = () => {
         },
       }
     );
-    const res = await data.json();
-    if (res.statusCode === 200) {
+    if (res.data.statusCode === 200) {
+      localStorage.setItem("isLoggedIn", true);
       navigate("/");
     }
   };

@@ -15,6 +15,8 @@ import Comments from "./components/Pages/Comments.jsx";
 import Subscribers from "./components/Pages/Subscribers.jsx";
 import Subscriptions from "./components/Pages/Subscriptions.jsx";
 import LikedVideos from "./components/Pages/LikedVideos.jsx";
+import { Provider } from "react-redux";
+import store from "./store/store.js";
 
 const appRouter = createBrowserRouter([
   {
@@ -76,9 +78,11 @@ const appRouter = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <RouterProvider router={appRouter}>
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  </RouterProvider>
+  <Provider store={store}>
+    <RouterProvider router={appRouter}>
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    </RouterProvider>
+  </Provider>
 );

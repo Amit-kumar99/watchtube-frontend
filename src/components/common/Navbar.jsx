@@ -1,18 +1,47 @@
 import { Link } from "react-router-dom";
-import { WATCHTUBE_LOGO_URL } from "../../constants";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleSidebar } from "../../store/appSlice";
+import toggleIcon from "../../../assets/toggleIcon.png";
+import logo from "../../../assets/watchtubeIcon.png";
 
 const Navbar = () => {
+  const dispatch = useDispatch();
+  const user = useSelector((store) => store.user.loggedInUserDetails);
+
+  const handleToggleSidebar = () => {
+    dispatch(toggleSidebar());
+  };
+
   return (
-    <div className="flex mt-2 justify-between h-[5vh] border">
+    <div className="flex my-2 justify-between h-[5vh] border">
       <div className="flex">
-        <button>
-          <img src="" alt="toggle-img"/>
+        <button
+          className="mx-5 py-1 px-2 hover:bg-gray-200"
+          onClick={handleToggleSidebar}
+        >
+          <img className="w-7" src={toggleIcon} alt="toggle-img" />
         </button>
-        <img className="w-24 h-7" src={WATCHTUBE_LOGO_URL} alt="watchtube-logo" />
+        <Link to="/">
+          <img className="w-10 h-10" src={logo} alt="watchtube-logo" />
+        </Link>
       </div>
       <div className="mr-5">
-        {/* <img src="" alt="user-img"/> */}
-        <Link className="border rounded-full p-2 font-semibold hover:bg-blue-100" to="/auth">Sign in</Link>
+        {user ? (
+          <Link to={`/channel/${user._id}`}>
+            <img
+              className="w-10 h-10 rounded-full"
+              src={user.avatar}
+              alt="avatar"
+            />
+          </Link>
+        ) : (
+          <Link
+            className="border rounded-full p-2 font-semibold hover:bg-blue-100"
+            to="/auth"
+          >
+            Sign in
+          </Link>
+        )}
       </div>
     </div>
   );
