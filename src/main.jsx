@@ -52,19 +52,19 @@ const appRouter = createBrowserRouter([
         element: <LikedVideos />,
       },
       {
-        path: "/channel/:userId",
+        path: "/channel/:channelId",
         element: <Channel />,
         children: [
           {
-            path: "/channel/:userId",
+            path: "/channel/:channelId",
             element: <Videos />,
           },
           {
-            path: "/channel/:userId/playlists",
+            path: "/channel/:channelId/playlists",
             element: <Playlists />,
           },
           {
-            path: "/channel/:userId/tweets",
+            path: "/channel/:channelId/tweets",
             element: <Tweets />,
           },
         ],
