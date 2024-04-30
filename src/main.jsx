@@ -17,6 +17,7 @@ import Subscriptions from "./components/Pages/Subscriptions.jsx";
 import LikedVideos from "./components/Pages/LikedVideos.jsx";
 import { Provider } from "react-redux";
 import store from "./store/store.js";
+import Playlist from "./components/Pages/Playlist.jsx";
 
 const appRouter = createBrowserRouter([
   {
@@ -68,6 +69,10 @@ const appRouter = createBrowserRouter([
             element: <Tweets />,
           },
         ],
+      },
+      {
+        path: "/playlist/:playlistId",
+        element: <Playlist />,
       },
       {
         path: "/comments",
