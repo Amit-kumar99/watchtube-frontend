@@ -2,8 +2,10 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { BACKEND_URL_PREFIX } from "../../constants";
 import { Link, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Playlists = () => {
+  const user = useSelector((store) => store.user.loggedInUserDetails);
   const { channelId } = useParams();
   const [playlists, setPlaylists] = useState(null);
 
@@ -32,6 +34,10 @@ const Playlists = () => {
     return "loading...";
   }
 
+  if (playlists.length === 0) {
+    return "No playlist available";
+  }
+
   return (
     <div className="flex flex-wrap mb-3">
       {playlists.map((playlist) => (
@@ -44,7 +50,7 @@ const Playlists = () => {
               View Full Playlist
             </Link>
           </div>
-          <div className="flex justify-between mt-1">
+          {(user._id === channelId) && (<div className="flex justify-between mt-1">
             <button
               className="bg-blue-700 text-white p-2 rounded-sm"
               onClick={handleUpdatePlaylist}
@@ -57,7 +63,7 @@ const Playlists = () => {
             >
               Delete Playlist
             </button>
-          </div>
+          </div>)}
         </div>
       ))}
     </div>

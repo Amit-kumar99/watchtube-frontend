@@ -1,11 +1,15 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { BACKEND_URL_PREFIX } from "../../constants";
-import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const LikedVideos = () => {
   const [likedVideos, setLikedVideos] = useState(null);
   const [likedVideosCount, setLikedVideosCount] = useState(null);
+
+  if (!localStorage.getItem("isLoggedIn")) {
+    return "Please log in to see your liked videos";
+  }
 
   const fetchLikedVideos = async () => {
     const res = await axios.get(`${BACKEND_URL_PREFIX}/likes/allLikedVideos`, {
@@ -34,7 +38,7 @@ const LikedVideos = () => {
       </div>
 
       {likedVideos.map((video) => (
-        <div key={video._id} className="border w-full flex mb-5">
+        <Link to={`/watch?v=${video.likedVideos[0]._id}`} key={video._id} className="border w-full flex mb-5">
           <div>
             <div className="absolute bg-black text-white py-1 px-2 rounded-md">
               {video.likedVideos[0].duration.toFixed(2)}
@@ -59,7 +63,7 @@ const LikedVideos = () => {
               <div>{video.likedVideos[0].createdAt} ago</div>
             </div>
           </div>
-        </div>
+        </Link>
       ))}
     </div>
   );

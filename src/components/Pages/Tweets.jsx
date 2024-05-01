@@ -4,8 +4,10 @@ import { BACKEND_URL_PREFIX } from "../../constants";
 import { useParams } from "react-router-dom";
 import LikedIcon from "../../../assets/likedIcon.png";
 import LikeIcon from "../../../assets/likeIcon.png";
+import { useSelector } from "react-redux";
 
 const Tweets = () => {
+  const user = useSelector((store) => store.user.loggedInUserDetails);
   const { channelId } = useParams();
   const [tweets, setTweets] = useState(null);
 
@@ -34,6 +36,10 @@ const Tweets = () => {
 
   if (!tweets) {
     return "loading...";
+  }
+
+  if (tweets.length === 0) {
+    return "No tweets available";
   }
 
   return (
@@ -65,7 +71,7 @@ const Tweets = () => {
             </div>
           </div>
 
-          <div className="flex flex-col ml-auto">
+          {(user._id === channelId) && (<div className="flex flex-col ml-auto">
             <button
               className="bg-blue-700 text-white p-2 rounded-sm mb-2"
               onClick={handleEditTweet}
@@ -78,7 +84,7 @@ const Tweets = () => {
             >
               Delete Tweet
             </button>
-          </div>
+          </div>)}
         </div>
       ))}
     </div>

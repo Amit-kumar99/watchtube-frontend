@@ -3,10 +3,16 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { Link, Outlet, useParams } from "react-router-dom";
 import { BACKEND_URL_PREFIX } from "../../constants";
+import { useSelector } from "react-redux";
 
 const Channel = () => {
+  const user = useSelector((store) => store.user.loggedInUserDetails);
   const { channelId } = useParams();
   const [channel, setChannel] = useState(null);
+
+  if (!localStorage.getItem("isLoggedIn")) {
+    return "Please log in to see your channel";
+  }
 
   const fetchChannelDetails = async () => {
     const res = await axios.get(
@@ -23,6 +29,10 @@ const Channel = () => {
   useEffect(() => {
     fetchChannelDetails();
   }, []);
+
+  const handleCustomizeChannel = () => {};
+
+  const handleToggleSubscription = () => {};
 
   if (!channel) {
     return "loading...";
@@ -52,9 +62,18 @@ const Channel = () => {
             <span>{channel.subscribersCount} subscribers . </span>
             <span>{channel.subscribedToCount} subscriptions</span>
           </div>
-          <div className="bg-gray-300 p-2 rounded-lg w-40">
-            Customize channel
-          </div>
+          {user._id === channelId && (
+            <button className="bg-gray-300 p-2 rounded-lg w-40 hover:bg-gray-200"
+            onClick={handleCustomizeChannel}>
+              Customize channel
+            </button>
+          )}
+          {user._id !== channelId && (
+            <button className="bg-gray-300 p-2 rounded-lg w-24 hover:bg-gray-200"
+            onClick={handleToggleSubscription}>
+              {channel.isSubscribed ? "Subscribed" : "Subscribe"}
+            </button>
+          )}
         </div>
       </div>
 
@@ -80,7 +99,7 @@ const Channel = () => {
       </div>
 
       <div className="border mt-3">
-        <Outlet/>
+        <Outlet />
       </div>
     </div>
   );
