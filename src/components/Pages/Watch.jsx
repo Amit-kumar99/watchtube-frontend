@@ -14,11 +14,7 @@ const Watch = () => {
   const videoId = searchParams.get("v");
   const [video, setVideo] = useState(null);
   const [comments, setComments] = useState(null);
-  const [subscribersCountUI, setSubscribersCountUI] = useState(null);
-  const [isSubscribedUI, setIsSubscribedUI] = useState(null);
   const [commentsCountUI, setCommentsCountUI] = useState(null);
-  const [videoLikesCountUI, setVideoLikesCountUI] = useState(null);
-  const [isVideoLikedUI, setIsVideoLikedUI] = useState(null);
   const [commentUI, setCommentUI] = useState("");
   const [commentAdded, setCommentAdded] = useState(false);
 
@@ -31,10 +27,6 @@ const Watch = () => {
     });
 
     setVideo(res.data.data);
-    setIsSubscribedUI(res.data.data.isSubscribed);
-    setIsVideoLikedUI(res.data.data.isLiked);
-    setSubscribersCountUI(res.data.data.subscribersCount);
-    setVideoLikesCountUI(res.data.data.likesCount);
   };
 
   const fetchComments = async () => {
@@ -57,6 +49,15 @@ const Watch = () => {
   }, []);
 
   const handleToggleSubscribe = async () => {
+     //to immediately show change in UI
+    setVideo((prevVideo) => ({
+      ...prevVideo,
+      isSubscribed: !prevVideo.isSubscribed,
+      subscribersCount: prevVideo.isSubscribed
+        ? prevVideo.subscribersCount - 1
+        : prevVideo.subscribersCount + 1,
+    }));
+
     await axios.post(
       `${BACKEND_URL_PREFIX}/subscriptions/${video.owner[0]._id}`,
       {},
@@ -67,13 +68,18 @@ const Watch = () => {
         },
       }
     );
-    isSubscribedUI
-      ? setSubscribersCountUI((prev) => prev - 1)
-      : setSubscribersCountUI((prev) => prev + 1);
-    setIsSubscribedUI(!isSubscribedUI);
   };
 
   const handleToggleVideoLike = async () => {
+     //to immediately show change in UI
+    setVideo((prevVideo) => ({
+      ...prevVideo,
+      isLiked: !prevVideo.isLiked,
+      likesCount: prevVideo.isLiked
+        ? prevVideo.likesCount - 1
+        : prevVideo.likesCount + 1,
+    }));
+
     await axios.post(
       `${BACKEND_URL_PREFIX}/likes/toggleVideoLike/${video._id}`,
       {},
@@ -84,10 +90,6 @@ const Watch = () => {
         },
       }
     );
-    isVideoLikedUI
-      ? setVideoLikesCountUI((prev) => prev - 1)
-      : setVideoLikesCountUI((prev) => prev + 1);
-    setIsVideoLikedUI(!isVideoLikedUI);
   };
 
   const handleAddComment = async () => {
@@ -95,6 +97,7 @@ const Watch = () => {
       return;
     }
     setCommentAdded(true);
+
     await axios.post(
       `${BACKEND_URL_PREFIX}/comments/addVideoComment/${video._id}`,
       {
@@ -110,9 +113,46 @@ const Watch = () => {
     setCommentsCountUI((prev) => prev + 1);
   };
 
-  const handleDeleteComment = (e, commentId) => {};
+  const handleDeleteComment = async (commentId) => {
+    //to immediately show change in UI
+    setComments(comments.filter((comment) => comment._id !== commentId));
+    setCommentsCountUI((prevCount) => prevCount - 1);
 
-  const handleToggleCommentLike = (commentId) => {};
+    await axios.delete(
+      `${BACKEND_URL_PREFIX}/comments/deleteVideoComment/${videoId}/${commentId}`,
+      {
+        withCredentials: true,
+      }
+    );
+  };
+
+  const handleToggleCommentLike = async (commentId) => {
+    //to immediately show change in UI
+    setComments((prevComments) =>
+      prevComments.map((comment) =>
+        comment._id === commentId
+          ? {
+              ...comment,
+              isLiked: !comment.isLiked,
+              likesCount: comment.isLiked
+                ? comment.likesCount - 1
+                : comment.likesCount + 1,
+            }
+          : comment
+      )
+    );
+    
+    await axios.post(
+      `${BACKEND_URL_PREFIX}/likes/toggleCommentLike/${commentId}`,
+      {},
+      {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  };
 
   if (!video) {
     return "Loading ...";
@@ -142,34 +182,48 @@ const Watch = () => {
               >
                 {video.owner[0].username}
               </Link>
-              <div>{subscribersCountUI} subscribers</div>
+              <div>{video.subscribersCount} subscribers</div>
             </div>
             {user._id !== video.owner[0]._id && (
               <button
                 className="font-semibold bg-gray-300 px-5 py-2 rounded-full hover:bg-gray-200"
                 onClick={handleToggleSubscribe}
               >
-                {isSubscribedUI ? "Subscribed" : "Subscribe"}
+                {video.isSubscribed ? "Subscribed" : "Subscribe"}
               </button>
             )}
 
             <div className="ml-auto flex border">
               <div className="mr-2 bg-gray-400 p-1 rounded-md my-2 flex">
-                <span className="text-white mr-1">{videoLikesCountUI}</span>
+                <span className="text-white mr-1">{video.likesCount}</span>
                 <span
                   className={"cursor-pointer"}
                   onClick={handleToggleVideoLike}
                 >
                   <img
                     className="w-5"
-                    src={isVideoLikedUI ? LikedIcon : LikeIcon}
+                    src={video.isLiked ? LikedIcon : LikeIcon}
                     alt="like-icon"
                   />
                 </span>
               </div>
             </div>
           </div>
+          {/* <button
+              className="p-2 bg-blue-700 text-white font-semibold"
+              onClick={() => showPlaylists(true)}
+              >
+              Save To Playlist
+              </button> */}
         </div>
+        {/* <div>
+  {playlists.map(p => (
+    <div key={p._id}>
+      <input type="checkbox" onChange={toggleAddToPlaylist}/>
+      <label>{p.name}</label>
+    </div>
+  ))}
+</div>  */}
 
         <div className="bg-gray-300 mt-5 p-2 rounded-md">
           <div className="flex font-semibold">
@@ -261,13 +315,15 @@ const Watch = () => {
                             {comment.owner[0].username}
                           </div>
                         </Link>
-                        <div className="text-xs mt-[2px] text-gray-600">{timeDifference(comment.createdAt)} ago</div>
+                        <div className="text-xs mt-[2px] text-gray-600">
+                          {timeDifference(comment.createdAt)} ago
+                        </div>
                       </div>
                       <div>{comment.content}</div>
                       <div className="flex">
                         <span className="mr-1">{comment.likesCount}</span>
                         <span
-                          className={"cursor-pointer"}
+                          className="cursor-pointer"
                           onClick={() => handleToggleCommentLike(comment._id)}
                         >
                           <img
@@ -278,10 +334,11 @@ const Watch = () => {
                         </span>
                       </div>
                     </div>
-                    {user._id === comment.owner[0]._id && (
+                    {(user._id === video.owner[0]._id ||
+                      user._id === comment.owner[0]._id) && (
                       <button
                         className="ml-auto flex flex-col items-center my-auto px-2 py-1 bg-red-700 hover:bg-red-500 text-white"
-                        onClick={(e) => handleDeleteComment(e, comment._id)}
+                        onClick={() => handleDeleteComment(comment._id)}
                       >
                         Delete
                       </button>
