@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import LikeIcon from "../../../assets/likeIcon.png";
 import LikedIcon from "../../../assets/likedIcon.png";
 import ReactPlayer from "react-player";
+import timeDifference from "../../helpers/timeDifference";
 
 const Watch = () => {
   const user = useSelector((store) => store.user.loggedInUserDetails);
@@ -173,7 +174,7 @@ const Watch = () => {
         <div className="bg-gray-300 mt-5 p-2 rounded-md">
           <div className="flex font-semibold">
             <div className="mr-3">{video.views} views</div>
-            <div>{video.createdAt} ago</div>
+            <div>{timeDifference(video.createdAt)} ago</div>
           </div>
           <div>{video.description}</div>
         </div>
@@ -254,11 +255,14 @@ const Watch = () => {
                       </Link>
                     </div>
                     <div>
-                      <Link to={`/channel/${comment.owner[0]._id}`}>
-                        <div className="font-semibold">
-                          {comment.owner[0].username}
-                        </div>
-                      </Link>
+                      <div className="flex">
+                        <Link to={`/channel/${comment.owner[0]._id}`}>
+                          <div className="font-semibold mr-2">
+                            {comment.owner[0].username}
+                          </div>
+                        </Link>
+                        <div className="text-xs mt-[2px] text-gray-600">{timeDifference(comment.createdAt)} ago</div>
+                      </div>
                       <div>{comment.content}</div>
                       <div className="flex">
                         <span className="mr-1">{comment.likesCount}</span>

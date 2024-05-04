@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { BACKEND_URL_PREFIX } from "../../constants";
 import { Link } from "react-router-dom";
+import timeDifference from "../../helpers/timeDifference";
 
 const Home = () => {
   const [videos, setVideos] = useState([]);
@@ -16,14 +17,14 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="border w-full">
+    <div className="border w-full ml-10">
       <div className="flex flex-wrap border w-full">
         {videos.length !== 0 &&
           videos.map((video) => (
             <Link
               to={`/watch?v=${video._id}`}
               key={video._id}
-              className="border w-3/12 mr-5 mb-5"
+              className="border w-[31%] mr-5 mb-5"
             >
               <div className="absolute bg-black text-white p-1">
                 {video.duration.toFixed(2)}
@@ -45,10 +46,17 @@ const Home = () => {
                 </div>
                 <div>
                   <div className="font-semibold text-lg">{video.title}</div>
-                  <div>{video.owner[0].username}</div>
+                  <div>
+                    <Link
+                      to={`/channel/${video.owner[0]._id}`}
+                      className="font-semibold text-gray-600 hover:text-gray-400"
+                    >
+                      {video.owner[0].username}
+                    </Link>
+                  </div>
                   <div className="flex">
                     <div className="mr-2">{video.views} views .</div>
-                    <div>{video.createdAt}</div>
+                    <div>{timeDifference(video.createdAt)} ago</div>
                   </div>
                 </div>
               </div>

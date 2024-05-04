@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { BACKEND_URL_PREFIX } from "../../constants";
 import { Link, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import timeDifference from "../../helpers/timeDifference";
 
 const Videos = () => {
   const user = useSelector((store) => store.user.loggedInUserDetails);
@@ -58,17 +59,27 @@ const Videos = () => {
           </div>
           <div className="font-semibold mt-1">{video.title}</div>
           <div className="flex">
-            <div className="mr-2">{video.views} views .</div>
-            <div>{video.createdAt} ago</div>
+            <div className="mr-1">{video.views} views .</div>
+            <div>{timeDifference(video.createdAt)} ago</div>
           </div>
-          {(user._id === channelId) && (<div className="flex justify-between mt-2">
-            <button className="bg-lime-700 text-white font-semibold py-2 px-4" onClick={handleEditVideo}>
-              Edit video
-            </button>
-            <button className="bg-red-700 text-white font-semibold py-2 px-4" onClick={handleDeleteVideo}>
-              Delete video
-            </button>
-          </div>)}
+          <div className="text-gray-500 text-sm">{video.description}</div>
+          {user._id === channelId && (
+            <div className="flex justify-between mt-2">
+              <button
+                className="bg-lime-700 text-white font-semibold py-2 px-4"
+                onClick={(e) => handleEditVideo()
+                }
+              >
+                Edit video
+              </button>
+              <button
+                className="bg-red-700 text-white font-semibold py-2 px-4"
+                onClick={handleDeleteVideo}
+              >
+                Delete video
+              </button>
+            </div>
+          )}
         </Link>
       ))}
     </div>

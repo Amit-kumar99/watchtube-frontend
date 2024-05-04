@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import LikedIcon from "../../../assets/likedIcon.png";
 import LikeIcon from "../../../assets/likeIcon.png";
 import { useSelector } from "react-redux";
+import timeDifference from "../../helpers/timeDifference";
 
 const Tweets = () => {
   const user = useSelector((store) => store.user.loggedInUserDetails);
@@ -58,7 +59,7 @@ const Tweets = () => {
               <span className="mr-2 font-semibold">
                 {tweet.owner[0].username}
               </span>
-              <span>{tweet.createdAt} ago</span>
+              <span>{timeDifference(tweet.createdAt)} ago</span>
             </div>
 
             <div>{tweet.content}</div>

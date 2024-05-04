@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { BACKEND_URL_PREFIX } from "../../constants";
 import { Link } from "react-router-dom";
+import timeDifference from "../../helpers/timeDifference";
 
 const LikedVideos = () => {
   const [likedVideos, setLikedVideos] = useState(null);
@@ -31,14 +32,19 @@ const LikedVideos = () => {
 
   return (
     <div className="mb-2 mx-5 w-full">
-
       <div className="mb-2">
         <h1 className="text-4xl mb-2">Liked Videos</h1>
-        <h3 className="font-semibold text-gray-600">{likedVideosCount} videos</h3>
+        <h3 className="font-semibold text-gray-600">
+          {likedVideosCount} videos
+        </h3>
       </div>
 
       {likedVideos.map((video) => (
-        <Link to={`/watch?v=${video.likedVideos[0]._id}`} key={video._id} className="border w-full flex mb-5">
+        <Link
+          to={`/watch?v=${video.likedVideos[0]._id}`}
+          key={video._id}
+          className="border w-full flex mb-5"
+        >
           <div>
             <div className="absolute bg-black text-white py-1 px-2 rounded-md">
               {video.likedVideos[0].duration.toFixed(2)}
@@ -56,11 +62,11 @@ const LikedVideos = () => {
               {video.likedVideos[0].title}
             </div>
             <div className="flex mt-2">
-              <div className="mr-2">
+              <Link to={`/channel/${video.likedVideos[0].owner[0]._id}`} className="mr-2 font-semibold text-gray-600 hover:text-gray-400">
                 {video.likedVideos[0].owner[0].username} .
-              </div>
+              </Link>
               <div className="mr-2">{video.likedVideos[0].views} views .</div>
-              <div>{video.likedVideos[0].createdAt} ago</div>
+              <div>{timeDifference(video.likedVideos[0].createdAt)} ago</div>
             </div>
           </div>
         </Link>
