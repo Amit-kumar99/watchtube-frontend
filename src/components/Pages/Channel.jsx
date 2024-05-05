@@ -1,9 +1,10 @@
-import axios from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
 import { Link, Outlet, useParams } from "react-router-dom";
-import { BACKEND_URL_PREFIX } from "../../constants";
 import { useSelector } from "react-redux";
+import fetchChannelDetails from "../../helpers/getChannelDetails.js";
+import axios from "axios";
+import { BACKEND_URL_PREFIX } from "../../constants";
 
 const Channel = () => {
   const user = useSelector((store) => store.user.loggedInUserDetails);
@@ -14,29 +15,35 @@ const Channel = () => {
     return "Please log in to see your channel";
   }
 
-  const fetchChannelDetails = async () => {
-    const res = await axios.get(
-      `${BACKEND_URL_PREFIX}/users/channel/${channelId}`,
-      {
-        withCredentials: true,
-      }
-    );
-    if (res.data.statusCode === 200) {
-      setChannel(res.data.data);
-    }
-  };
-
   useEffect(() => {
-    fetchChannelDetails();
+    fetchChannelDetails(channelId, setChannel);
   }, []);
-
-  const handleCustomizeChannel = () => {};
-
-  const handleToggleSubscription = () => {};
 
   if (!channel) {
     return "loading...";
   }
+
+  const handleToggleSubscription = async () => {
+    //to immediately show change in UI
+    setChannel((prevChannel) => ({
+      ...prevChannel,
+      isSubscribed: !prevChannel.isSubscribed,
+      subscribersCount: prevChannel.isSubscribed
+        ? prevChannel.subscribersCount - 1
+        : prevChannel.subscribersCount + 1,
+    }));
+
+    await axios.post(
+      `${BACKEND_URL_PREFIX}/subscriptions/${channelId}`,
+      {},
+      {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  };
 
   return (
     <div className="w-full">
@@ -63,14 +70,18 @@ const Channel = () => {
             <span>{channel.subscribedToCount} subscriptions</span>
           </div>
           {user._id === channelId && (
-            <button className="bg-gray-300 p-2 rounded-lg w-40 hover:bg-gray-200"
-            onClick={handleCustomizeChannel}>
+            <Link
+              to={`/channel/edit/`}
+              className="bg-gray-300 p-2 rounded-lg w-40 hover:bg-gray-200"
+            >
               Customize channel
-            </button>
+            </Link>
           )}
           {user._id !== channelId && (
-            <button className="bg-gray-300 p-2 rounded-lg w-24 hover:bg-gray-200"
-            onClick={handleToggleSubscription}>
+            <button
+              className="bg-gray-300 p-2 rounded-lg w-24 hover:bg-gray-200"
+              onClick={handleToggleSubscription}
+            >
               {channel.isSubscribed ? "Subscribed" : "Subscribe"}
             </button>
           )}
