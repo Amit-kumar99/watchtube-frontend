@@ -11,6 +11,9 @@ const Tweets = () => {
   const user = useSelector((store) => store.user.loggedInUserDetails);
   const { channelId } = useParams();
   const [tweets, setTweets] = useState(null);
+  const [showEditTweetForm, setShowEditTweetForm] = useState(false);
+  const [tweetContent, setTweetContent] = useState("");
+  const [editTweetId, setEditTweetId] = useState("");
 
   const fetchTweets = async () => {
     const res = await axios.get(
@@ -29,11 +32,72 @@ const Tweets = () => {
     fetchTweets();
   }, []);
 
-  const handleEditTweet = () => {};
+  const handleEditTweet = (tweetContent, tweetId) => {
+    setTweetContent(tweetContent);
+    setEditTweetId(tweetId);
+    setShowEditTweetForm(true);
+  };
 
-  const handleDeleteTweet = () => {};
+  const updateTweetApi = async () => {
+    //immediately update UI
+    setTweets((prevTweet) =>
+      prevTweet.map((tweet) =>
+        tweet._id === editTweetId ? { ...tweet, content: tweetContent } : tweet
+      )
+    );
 
-  const handleToggleTweetLike = () => {};
+    setShowEditTweetForm(false);
+
+    await axios.patch(
+      `${BACKEND_URL_PREFIX}/tweets/update/${channelId}/${editTweetId}`,
+      {
+        content: tweetContent,
+      },
+      {
+        withCredentials: true,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  };
+
+  const handleDeleteTweet = async (tweetId) => {
+    //immediately update UI
+    setTweets((prevTweet) =>
+      prevTweet.filter((tweet) => tweet._id !== tweetId)
+    );
+
+    await axios.delete(
+      `${BACKEND_URL_PREFIX}/tweets/delete/${channelId}/${tweetId}`,
+      {
+        withCredentials: true,
+      }
+    );
+  };
+
+  const handleToggleTweetLike = async (tweetId) => {
+    //immediately update UI
+    setTweets((prevTweet) =>
+      prevTweet.map((tweet) =>
+        tweet._id === tweetId
+          ? {
+              ...tweet,
+              isLiked: !tweet.isLiked,
+              likesCount: tweet.isLiked
+                ? tweet.likesCount - 1
+                : tweet.likesCount + 1,
+            }
+          : tweet
+      )
+    );
+
+    await axios.post(
+      `${BACKEND_URL_PREFIX}/likes/toggleTweetLike/${tweetId}`,
+      {},
+      {
+        withCredentials: true,
+      }
+    );
+  };
 
   if (!tweets) {
     return "loading...";
@@ -45,6 +109,35 @@ const Tweets = () => {
 
   return (
     <div className="mb-3">
+      {/* edit tweet form */}
+      {showEditTweetForm && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
+          <div className="bg-white p-5 rounded shadow-lg w-3/12">
+            <button
+              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4"
+              onClick={() => {
+                setShowEditTweetForm(false);
+                setTweetContent("");
+              }}
+            >
+              Close
+            </button>
+            <textarea
+              className="border mx-5 h-36"
+              value={tweetContent}
+              onChange={(e) => setTweetContent(e.target.value)}
+              placeholder="Enter your tweet"
+            />
+            <button
+              className="bg-lime-700 hover:bg-lime-500 text-white font-bold py-2 px-4 rounded mt-4"
+              onClick={updateTweetApi}
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      )}
+
       {tweets.map((tweet) => (
         <div key={tweet._id} className="border w-8/12 flex p-5 rounded-md mb-5">
           <div className="mr-3">
@@ -66,26 +159,31 @@ const Tweets = () => {
 
             <div className="flex">
               <span className="mr-1">{tweet.likesCount}</span>
-              <span onClick={handleToggleTweetLike}>
-                <img className="w-5 cursor-pointer" src={tweet.isLiked ? LikedIcon : LikeIcon} />
+              <span onClick={() => handleToggleTweetLike(tweet._id)}>
+                <img
+                  className="w-5 cursor-pointer"
+                  src={tweet.isLiked ? LikedIcon : LikeIcon}
+                />
               </span>
             </div>
           </div>
 
-          {(user._id === channelId) && (<div className="flex flex-col ml-auto">
-            <button
-              className="bg-blue-700 text-white p-2 rounded-sm mb-2"
-              onClick={handleEditTweet}
-            >
-              Edit Tweet
-            </button>
-            <button
-              className="bg-red-700 text-white p-2 rounded-sm"
-              onClick={handleDeleteTweet}
-            >
-              Delete Tweet
-            </button>
-          </div>)}
+          {user._id === channelId && (
+            <div className="flex flex-col ml-auto">
+              <button
+                className="bg-blue-700 text-white p-2 rounded-sm mb-2"
+                onClick={() => handleEditTweet(tweet.content, tweet._id)}
+              >
+                Edit Tweet
+              </button>
+              <button
+                className="bg-red-700 text-white p-2 rounded-sm"
+                onClick={() => handleDeleteTweet(tweet._id)}
+              >
+                Delete Tweet
+              </button>
+            </div>
+          )}
         </div>
       ))}
     </div>
