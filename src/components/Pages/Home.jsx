@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { BACKEND_URL_PREFIX } from "../../constants";
 import { Link } from "react-router-dom";
 import timeDifference from "../../helpers/timeDifference";
+import convertDuration from "../../helpers/convertDuration";
 
 const Home = () => {
   const [videos, setVideos] = useState([]);
@@ -27,7 +28,7 @@ const Home = () => {
               className="border w-[31%] mr-5 mb-5"
             >
               <div className="absolute bg-black text-white p-1">
-                {video.duration.toFixed(2)}
+                {convertDuration(Math.floor(video.duration))}
               </div>
               <div className="w-full">
                 <img

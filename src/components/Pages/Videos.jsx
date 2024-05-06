@@ -5,6 +5,7 @@ import { Link, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import timeDifference from "../../helpers/timeDifference";
 import convertUrlToFile from "../../helpers/convertUrlToFile";
+import convertDuration from "../../helpers/convertDuration";
 
 const Videos = () => {
   const user = useSelector((store) => store.user.loggedInUserDetails);
@@ -185,10 +186,10 @@ const Videos = () => {
         <Link
           to={`/watch?v=${video._id}`}
           key={video._id}
-          className="border w-3/12"
+          className="border w-3/12 mr-5"
         >
           <div className="absolute bg-black text-white py-1 px-2 rounded-md">
-            {video.duration.toFixed(2)}
+            {convertDuration(Math.floor(video.duration))}
           </div>
           <div>
             <img

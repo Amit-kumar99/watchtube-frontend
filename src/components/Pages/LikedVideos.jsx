@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { BACKEND_URL_PREFIX } from "../../constants";
 import { Link } from "react-router-dom";
-import timeDifference from "../../helpers/timeDifference";
+import convertDuration from "../../helpers/convertDuration";
 
 const LikedVideos = () => {
   const [likedVideos, setLikedVideos] = useState(null);
@@ -47,7 +47,7 @@ const LikedVideos = () => {
         >
           <div>
             <div className="absolute bg-black text-white py-1 px-2 rounded-md">
-              {video.likedVideos[0].duration.toFixed(2)}
+              {convertDuration(Math.floor(video.likedVideos[0].duration))}
             </div>
             <div className="mr-2">
               <img
@@ -66,7 +66,7 @@ const LikedVideos = () => {
                 {video.likedVideos[0].owner[0].username} .
               </Link>
               <div className="mr-2">{video.likedVideos[0].views} views .</div>
-              <div>{timeDifference(video.likedVideos[0].createdAt)} ago</div>
+              <div>{convertDuration(video.likedVideos[0].createdAt)} ago</div>
             </div>
           </div>
         </Link>

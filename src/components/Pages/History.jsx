@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { BACKEND_URL_PREFIX } from "../../constants";
 import { Link } from "react-router-dom";
+import convertDuration from "../../helpers/convertDuration";
 
 const History = () => {
   const [watchedVideos, setWatchedVideos] = useState(null);
@@ -37,7 +38,7 @@ const History = () => {
             <Link to={`/watch?v=${video._id}`} key={video._id} className="border w-full flex mb-5">
               <div className="w-4/12">
                 <div className="absolute bg-black text-white py-1 px-2 rounded-md">
-                  {video.duration.toFixed(2)}
+                  {convertDuration(Math.floor(video.duration))}
                 </div>
                 <div className="mr-5">
                   <img
