@@ -16,7 +16,6 @@ const Watch = () => {
   const [comments, setComments] = useState(null);
   const [commentsCountUI, setCommentsCountUI] = useState(null);
   const [commentUI, setCommentUI] = useState("");
-  const [commentAdded, setCommentAdded] = useState(false);
 
   const fetchVideo = async () => {
     const res = await axios.get(`${BACKEND_URL_PREFIX}/videos/${videoId}`, {
@@ -49,7 +48,7 @@ const Watch = () => {
   }, []);
 
   const handleToggleSubscribe = async () => {
-     //to immediately show change in UI
+    //to immediately show change in UI
     setVideo((prevVideo) => ({
       ...prevVideo,
       isSubscribed: !prevVideo.isSubscribed,
@@ -71,7 +70,7 @@ const Watch = () => {
   };
 
   const handleToggleVideoLike = async () => {
-     //to immediately show change in UI
+    //to immediately show change in UI
     setVideo((prevVideo) => ({
       ...prevVideo,
       isLiked: !prevVideo.isLiked,
@@ -96,9 +95,8 @@ const Watch = () => {
     if (!commentUI?.trim()) {
       return;
     }
-    setCommentAdded(true);
 
-    await axios.post(
+    const res = await axios.post(
       `${BACKEND_URL_PREFIX}/comments/addVideoComment/${video._id}`,
       {
         content: commentUI,
@@ -110,7 +108,24 @@ const Watch = () => {
         },
       }
     );
-    setCommentsCountUI((prev) => prev + 1);
+    // immediately updating UI
+    console.log(res.data);
+    if (res.data.statusCode === 200) {
+      const newComment = {
+        ...res.data.data,
+        owner: [
+          {
+            _id: res.data.data.owner,
+            avatar: user.avatar,
+            username: user.username,
+          },
+        ],
+        isLiked: false,
+        likesCount: 0,
+      };
+      setComments((prevComments) => [...prevComments, newComment]);
+      setCommentsCountUI((prevCount) => prevCount + 1);
+    }
   };
 
   const handleDeleteComment = async (commentId) => {
@@ -141,7 +156,7 @@ const Watch = () => {
           : comment
       )
     );
-    
+
     await axios.post(
       `${BACKEND_URL_PREFIX}/likes/toggleCommentLike/${commentId}`,
       {},
@@ -270,30 +285,6 @@ const Watch = () => {
         </form>
 
         <div className="mt-2 border">
-          {commentAdded && (
-            <div className="border border-black">
-              <div className="flex p-2">
-                <div className="mr-2">
-                  <img
-                    className="w-10 h-10 rounded-full"
-                    src={user.avatar}
-                    alt="avatar"
-                  />
-                </div>
-                <div>
-                  <div className="font-semibold">{user.username}</div>
-                  <div>{commentUI}</div>
-                  <div className="flex">
-                    <span className="mr-1">0</span>
-                    <span className={"cursor-pointer"}>
-                      <img className="w-5" src={LikeIcon} alt="like-icon" />
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
           <div>
             {comments &&
               comments.map((comment) => (

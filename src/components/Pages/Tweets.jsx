@@ -14,6 +14,7 @@ const Tweets = () => {
   const [showEditTweetForm, setShowEditTweetForm] = useState(false);
   const [tweetContent, setTweetContent] = useState("");
   const [editTweetId, setEditTweetId] = useState("");
+  const [tweet, setTweet] = useState("");
 
   const fetchTweets = async () => {
     const res = await axios.get(
@@ -31,6 +32,37 @@ const Tweets = () => {
   useEffect(() => {
     fetchTweets();
   }, []);
+
+  const handleCreateTweet = async () => {
+    const res = await axios.post(
+      `${BACKEND_URL_PREFIX}/tweets/create/${channelId}`,
+      {
+        content: tweet,
+      },
+      {
+        withCredentials: true,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    setTweet("");
+    
+    console.log(res.data);
+    if (res.data.statusCode === 200) {
+      console.log("inside if");
+      const newTweet = {
+        ...res.data.data,
+        likesCount: 0,
+        isLiked: false,
+        owner: [
+          {
+            avatar: user.avatar,
+            username: user.username,
+          },
+        ],
+      };
+      setTweets((prevTweet) => [...prevTweet, newTweet]);
+    }
+  };
 
   const handleEditTweet = (tweetContent, tweetId) => {
     setTweetContent(tweetContent);
@@ -137,6 +169,31 @@ const Tweets = () => {
           </div>
         </div>
       )}
+
+      {/* create tweet form */}
+      <form
+        className="my-3 border w-10/12 flex py-2"
+        onSubmit={(e) => e.preventDefault()}
+      >
+        <img
+          className="w-10 h-10 rounded-full mx-3"
+          src={user.avatar}
+          alt="avatar"
+        />
+        <input
+          className="border w-11/12 p-2 mr-2"
+          type="text"
+          value={tweet}
+          onChange={(e) => setTweet(e.target.value)}
+          placeholder="Enter your tweet"
+        />
+        <button
+          className="bg-blue-700 text-white font-semibold py-2 px-4 mr-2"
+          onClick={handleCreateTweet}
+        >
+          Tweet
+        </button>
+      </form>
 
       {tweets.map((tweet) => (
         <div key={tweet._id} className="border w-8/12 flex p-5 rounded-md mb-5">
