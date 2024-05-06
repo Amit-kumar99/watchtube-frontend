@@ -12,6 +12,9 @@ const Sidebar = () => {
     <div className="w-[20vw] h-[90vh] border p-2 mx-5 font-semibold">
       <Link to="/">
         <div className="hover:bg-gray-100">Home</div>
+      </Link> 
+      <Link to="/content">
+        <div className="hover:bg-gray-100">Content</div>
       </Link>
       <Link to="/history">
         <div className="hover:bg-gray-100">History</div>

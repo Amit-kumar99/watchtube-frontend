@@ -18,6 +18,7 @@ import LikedVideos from "./components/Pages/LikedVideos.jsx";
 import { Provider } from "react-redux";
 import store from "./store/store.js";
 import Playlist from "./components/Pages/Playlist.jsx";
+import Content from "./components/Pages/Content.jsx";
 
 const appRouter = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const appRouter = createBrowserRouter([
       {
         path: "/auth",
         element: <Auth />,
+      },
+      {
+        path: "/content",
+        element: <Content />,
       },
       {
         path: "/watch",
@@ -61,11 +66,11 @@ const appRouter = createBrowserRouter([
             element: <Videos />,
           },
           {
-            path: "/channel/:channelId/playlists",
+            path: "playlists",
             element: <Playlists />,
           },
           {
-            path: "/channel/:channelId/tweets",
+            path: "tweets",
             element: <Tweets />,
           },
         ],
