@@ -16,6 +16,10 @@ const Watch = () => {
   const [comments, setComments] = useState(null);
   const [commentsCountUI, setCommentsCountUI] = useState(null);
   const [commentUI, setCommentUI] = useState("");
+  const [playlists, setPlaylists] = useState(null);
+  const [showPlaylists, setShowPlaylists] = useState(false);
+  const [playlistName, setPlaylistName] = useState("");
+  const [showNewPlaylistForm, setShowNewPlaylistForm] = useState(false);
 
   const fetchVideo = async () => {
     const res = await axios.get(`${BACKEND_URL_PREFIX}/videos/${videoId}`, {
@@ -169,6 +173,72 @@ const Watch = () => {
     );
   };
 
+  const fetchPlaylists = async () => {
+    const res = await axios.get(
+      `${BACKEND_URL_PREFIX}/playlists/getAllForAVideo/${videoId}`,
+      {
+        withCredentials: true,
+      }
+    );
+    if (res.data.statusCode === 200) {
+      console.log(res.data.data);
+      setPlaylists(res.data.data);
+    }
+  };
+
+  const handleShowPlaylists = () => {
+    setShowPlaylists(true);
+    fetchPlaylists();
+  };
+
+  const handleToggleAddToPlaylist = async (playlistId) => {
+    // immediately update UI
+    setPlaylists((prevPlaylist) =>
+      prevPlaylist.map((playlist) =>
+        playlist._id === playlistId
+          ? { ...playlist, isChecked: !playlist.isChecked }
+          : playlist
+      )
+    );
+
+    const res = await axios.patch(
+      `${BACKEND_URL_PREFIX}/playlists/toggleAddVideo/${playlistId}/${videoId}`,
+      {},
+      {
+        withCredentials: true,
+      }
+    );
+    if (res.data.statusCode === 200) {
+      alert(`video added/removed to/from ${playlistName}`);
+    }
+  };
+
+  const handleCreatePlaylistAndAddAVideo = async () => {
+    if (!playlistName?.trim()) {
+      alert("playlist name is required");
+      return;
+    }
+
+    //immediately update UI
+    setShowPlaylists(false);
+    setPlaylistName("");
+
+    const res = await axios.post(
+      `${BACKEND_URL_PREFIX}/playlists/create/${videoId}`,
+      {
+        name: playlistName,
+      },
+      {
+        withCredentials: true,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    if (res.data.statusCode !== 200) {
+      alert("playlist creation failed");
+    }
+    alert("playlist created and video added successfully");
+  };
+
   if (!video) {
     return "Loading ...";
   }
@@ -223,22 +293,73 @@ const Watch = () => {
                 </span>
               </div>
             </div>
-          </div>
-          {/* <button
+            <button
               className="p-2 bg-blue-700 text-white font-semibold"
-              onClick={() => showPlaylists(true)}
-              >
+              onClick={handleShowPlaylists}
+            >
               Save To Playlist
-              </button> */}
+            </button>
+          </div>
         </div>
-        {/* <div>
-  {playlists.map(p => (
-    <div key={p._id}>
-      <input type="checkbox" onChange={toggleAddToPlaylist}/>
-      <label>{p.name}</label>
-    </div>
-  ))}
-</div>  */}
+
+        {/* all playlists */}
+        {showPlaylists && (
+          <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
+            <div className="bg-white p-5 rounded shadow-lg w-3/12">
+              <button
+                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4 w-full"
+                onClick={() => {
+                  setShowPlaylists(false);
+                  setShowNewPlaylistForm(false);
+                  setPlaylistName("");
+                }}
+              >
+                Close
+              </button>
+              <div className="my-5">
+                {playlists &&
+                  playlists.map((playlist) => (
+                    <div key={playlist._id} className="mb-3 flex items-center">
+                      <input
+                        className="w-6 h-6 mr-3"
+                        type="checkbox"
+                        checked={playlist.isChecked}
+                        onChange={() => handleToggleAddToPlaylist(playlist._id)}
+                      />
+                      <label className="text-lg">{playlist.name}</label>
+                    </div>
+                  ))}
+              </div>
+              <button
+                className={
+                  "bg-blue-700 text-white px-3 py-2 font-semibold" +
+                  (showNewPlaylistForm && " hidden")
+                }
+                onClick={() => setShowNewPlaylistForm(true)}
+              >
+                Create New Playlist
+              </button>
+              {/* handleCreatePlaylist */}
+              {showNewPlaylistForm && (
+                <div className="mt-5">
+                  <input
+                    className="border w-full p-2 outline-none mb-2"
+                    type="text"
+                    placeholder="Enter playlist name"
+                    value={playlistName}
+                    onChange={(e) => setPlaylistName(e.target.value)}
+                  />
+                  <button
+                    className="bg-blue-700 text-white py-2 px-4 w-full"
+                    onClick={handleCreatePlaylistAndAddAVideo}
+                  >
+                    Create
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         <div className="bg-gray-300 mt-5 p-2 rounded-md">
           <div className="flex font-semibold">
