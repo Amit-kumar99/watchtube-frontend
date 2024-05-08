@@ -33,6 +33,7 @@ const Auth = () => {
     if (res.data.statusCode === 200) {
       localStorage.setItem("isLoggedIn", true);
       navigate("/");
+      window.location.reload();
     }
   };
 

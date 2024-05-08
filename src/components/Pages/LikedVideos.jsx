@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { BACKEND_URL_PREFIX } from "../../constants";
 import { Link } from "react-router-dom";
 import convertDuration from "../../helpers/convertDuration";
+import timeDifference from "../../helpers/timeDifference";
 
 const LikedVideos = () => {
   const [likedVideos, setLikedVideos] = useState(null);
@@ -66,7 +67,7 @@ const LikedVideos = () => {
                 {video.likedVideos[0].owner[0].username} .
               </Link>
               <div className="mr-2">{video.likedVideos[0].views} views .</div>
-              <div>{convertDuration(video.likedVideos[0].createdAt)} ago</div>
+              <div>{timeDifference(video.likedVideos[0].createdAt)} ago</div>
             </div>
           </div>
         </Link>

@@ -2,8 +2,12 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { BACKEND_URL_PREFIX } from "../../constants";
 import { useParams } from "react-router-dom";
+import convertDuration from "../../helpers/convertDuration";
+import timeDifference from "../../helpers/timeDifference";
+import { useSelector } from "react-redux";
 
 const Playlist = () => {
+  const user = useSelector((store) => store.user.loggedInUserDetails);
   const { playlistId } = useParams();
   const [playlist, setPlaylist] = useState(null);
   const [videosCount, setVideosCount] = useState(null);
@@ -26,7 +30,22 @@ const Playlist = () => {
     fetchPlaylist();
   }, []);
 
-  const handleRemoveVideoFromPlaylist = () => {}
+  const handleRemoveVideoFromPlaylist = async (videoId) => {
+    //immediately update UI
+    setPlaylist((prevPlaylist) => ({
+      ...prevPlaylist,
+      videos: prevPlaylist.videos.filter((video) => video._id !== videoId),
+    }));
+    setVideosCount((prevVideosCount) => prevVideosCount - 1);
+
+    await axios.patch(
+      `${BACKEND_URL_PREFIX}/playlists/toggleAddVideo/${playlistId}/${videoId}`,
+      {},
+      {
+        withCredentials: true,
+      }
+    );
+  };
 
   if (!playlist) {
     return "loading...";
@@ -41,11 +60,14 @@ const Playlist = () => {
       </div>
 
       {playlist.videos.map((video) => (
-        <div key={video._id} className="flex mb-5 border w-full justify-between">
+        <div
+          key={video._id}
+          className="flex mb-5 border w-full justify-between"
+        >
           <div className="flex">
             <div>
               <div className="absolute bg-black text-white py-1 px-2 rounded-md">
-                {video.duration.toFixed(2)}
+                {convertDuration(Math.floor(video.duration))}
               </div>
               <div className="mr-2">
                 <img
@@ -61,14 +83,21 @@ const Playlist = () => {
               <div className="flex mt-2">
                 <div className="mr-2">{video.owner.username} .</div>
                 <div className="mr-2">{video.views} views .</div>
-                <div>{video.createdAt} ago</div>
+                <div>{timeDifference(video.createdAt)} ago</div>
               </div>
             </div>
           </div>
 
-          <div>
-            <button className="bg-blue-700 text-white p-2 rounded-md" onClick={handleRemoveVideoFromPlaylist}>Remove From Playlist</button>
-          </div>
+          {user._id === playlist.owner._id && (
+            <div>
+              <button
+                className="bg-blue-700 text-white p-2 rounded-md"
+                onClick={() => handleRemoveVideoFromPlaylist(video._id)}
+              >
+                Remove From Playlist
+              </button>
+            </div>
+          )}
         </div>
       ))}
     </div>

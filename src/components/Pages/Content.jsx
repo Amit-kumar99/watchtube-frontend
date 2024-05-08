@@ -10,6 +10,10 @@ const Content = () => {
   const [videoTitle, setVideoTitle] = useState("");
   const [videoDescription, setVideoDescription] = useState("");
 
+  if (!localStorage.getItem("isLoggedIn")) {
+    return "Please log in to upload video";
+  }
+
   const handleVideoChange = (e) => {
     setVideoFile(e.target.files[0]);
     setVideoFileName(e.target.files[0].name);
