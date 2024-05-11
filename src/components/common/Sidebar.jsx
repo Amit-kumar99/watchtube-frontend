@@ -7,25 +7,15 @@ import { FaUsers } from "react-icons/fa6";
 import { SlLike } from "react-icons/sl";
 import { FaRegUser } from "react-icons/fa";
 import { BiLogOut } from "react-icons/bi";
-import axios from "axios";
-import { BACKEND_URL_PREFIX } from "../../constants";
+import useLogout from "../../customHooks/useLogout";
 
 const Sidebar = () => {
   const user = useSelector((store) => store.user.loggedInUserDetails);
+  const logout = useLogout();
 
   const handleLogout = async () => {
-    const res = await axios.post(
-      `${BACKEND_URL_PREFIX}/users/logout`,
-      {},
-      {
-        withCredentials: true,
-      }
-    );
-    if (res.data.statusCode === 200) {
-      localStorage.removeItem("isLoggedIn");
-      window.location.reload();
-    }
-  };
+    await logout();
+  }
 
   return (
     <div className="w-[20vw] h-[90vh] border p-2 mx-5 font-semibold">

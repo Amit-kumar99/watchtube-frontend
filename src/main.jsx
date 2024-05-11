@@ -18,6 +18,9 @@ import LikedVideos from "./components/Pages/LikedVideos.jsx";
 import { Provider } from "react-redux";
 import store from "./store/store.js";
 import Playlist from "./components/Pages/Playlist.jsx";
+import CustomizeChannel from "./components/Pages/CustomizeChannel.jsx";
+import PersonalDetails from "./components/Pages/PersonalDetails.jsx";
+import ChangePassword from "./components/Pages/ChangePassword.jsx";
 import Content from "./components/Pages/Content.jsx";
 
 const appRouter = createBrowserRouter([
@@ -72,6 +75,20 @@ const appRouter = createBrowserRouter([
           {
             path: "tweets",
             element: <Tweets />,
+          },
+        ],
+      },
+      {
+        path: "/channel/edit",
+        element: <CustomizeChannel />,
+        children: [
+          {
+            path: "personalDetails",
+            element: <PersonalDetails />,
+          },
+          {
+            path: "changePassword",
+            element: <ChangePassword />,
           },
         ],
       },
