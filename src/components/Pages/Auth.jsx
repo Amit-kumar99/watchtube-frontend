@@ -2,8 +2,11 @@ import { useState } from "react";
 import { BACKEND_URL_PREFIX } from "../../constants";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { login } from "../../store/userSlice";
 
 const Auth = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isSigninForm, setIsSigninForm] = useState(true);
   const [fullName, setFullName] = useState("");
@@ -32,8 +35,8 @@ const Auth = () => {
     );
     if (res.data.statusCode === 200) {
       localStorage.setItem("isLoggedIn", true);
+      dispatch(login(res.data.data.user));
       navigate("/");
-      window.location.reload();
     }
   };
 

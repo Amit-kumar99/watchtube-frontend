@@ -33,7 +33,7 @@ const Videos = () => {
 
   useEffect(() => {
     fetchUserVideos();
-  }, []);
+  }, [channelId]);
 
   const handleEditVideo = async (
     e,
@@ -128,7 +128,7 @@ const Videos = () => {
       {/* edit video form */}
       {showEditVideoForm && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
-          <div className="bg-white p-8 rounded shadow-lg w-3/12 flex flex-col">
+          <div className="bg-black p-8 rounded shadow-lg w-3/12 flex flex-col">
             <button
               className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4"
               onClick={() => {
@@ -143,7 +143,7 @@ const Videos = () => {
               className="py-14 my-2 w-full bg-blue-300"
               style={{
                 backgroundImage: `url(${thumbnailUrl})`,
-                backgroundSize: "cover",
+                backgroundSize: "100% 100%",
               }}
             >
               <label
@@ -152,22 +152,23 @@ const Videos = () => {
               >
                 + Thumbnail
                 <input
-                  className="absolute inset-0 opacity-0"
+                  className="absolute inset-0 opacity-0 cursor-pointer"
                   type="file"
                   id="thumbnail"
+                  acccept="image/*"
                   onChange={handleThumbnailChange}
                 />
               </label>
             </div>
             <input
-              className="border-b outline-none focus:border-b-2 focus:border-black mb-2"
+              className="border-b outline-none p-2 mb-5 bg-black"
               type="text"
               value={videoTitle}
               onChange={(e) => setVideoTitle(e.target.value)}
               placeholder="Enter new video title"
             />
             <textarea
-              className="border h-20"
+              className="border h-20 bg-black"
               value={videoDescription}
               onChange={(e) => setVideoDescription(e.target.value)}
               placeholder="Enter new video description"

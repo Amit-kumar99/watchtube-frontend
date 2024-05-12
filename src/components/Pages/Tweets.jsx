@@ -135,10 +135,6 @@ const Tweets = () => {
     return "loading...";
   }
 
-  if (tweets.length === 0) {
-    return "No tweets available";
-  }
-
   return (
     <div className="mb-3">
       {/* edit tweet form */}
@@ -195,54 +191,60 @@ const Tweets = () => {
         </button>
       </form>
 
-      {tweets.map((tweet) => (
-        <div key={tweet._id} className="border w-8/12 flex p-5 rounded-md mb-5">
-          <div className="mr-3">
-            <img
-              className="w-10 h-10 rounded-full"
-              src={tweet.owner[0].avatar}
-            />
-          </div>
+      {tweets.length === 0 && "No tweets available"}
 
-          <div>
+      {tweets.length !== 0 &&
+        tweets.map((tweet) => (
+          <div
+            key={tweet._id}
+            className="border w-8/12 flex p-5 rounded-md mb-5"
+          >
+            <div className="mr-3">
+              <img
+                className="w-10 h-10 rounded-full"
+                src={tweet.owner[0].avatar}
+              />
+            </div>
+
             <div>
-              <span className="mr-2 font-semibold">
-                {tweet.owner[0].username}
-              </span>
-              <span>{timeDifference(tweet.createdAt)} ago</span>
+              <div>
+                <span className="mr-2 font-semibold">
+                  {tweet.owner[0].username}
+                </span>
+                <span>{timeDifference(tweet.createdAt)} ago</span>
+              </div>
+
+              <div>{tweet.content}</div>
+
+              <div className="flex">
+                <span className="mr-1">{tweet.likesCount}</span>
+                <span onClick={() => handleToggleTweetLike(tweet._id)}>
+                  <img
+                    className="w-5 cursor-pointer"
+                    src={tweet.isLiked ? LikedIcon : LikeIcon}
+                  />
+                </span>
+              </div>
             </div>
 
-            <div>{tweet.content}</div>
-
-            <div className="flex">
-              <span className="mr-1">{tweet.likesCount}</span>
-              <span onClick={() => handleToggleTweetLike(tweet._id)}>
-                <img
-                  className="w-5 cursor-pointer"
-                  src={tweet.isLiked ? LikedIcon : LikeIcon}
-                />
-              </span>
-            </div>
+            {user._id === channelId && (
+              <div className="flex flex-col ml-auto">
+                <button
+                  className="bg-blue-700 text-white p-2 rounded-sm mb-2"
+                  onClick={() => handleEditTweet(tweet.content, tweet._id)}
+                >
+                  Edit Tweet
+                </button>
+                <button
+                  className="bg-red-700 text-white p-2 rounded-sm"
+                  onClick={() => handleDeleteTweet(tweet._id)}
+                >
+                  Delete Tweet
+                </button>
+              </div>
+            )}
           </div>
-
-          {user._id === channelId && (
-            <div className="flex flex-col ml-auto">
-              <button
-                className="bg-blue-700 text-white p-2 rounded-sm mb-2"
-                onClick={() => handleEditTweet(tweet.content, tweet._id)}
-              >
-                Edit Tweet
-              </button>
-              <button
-                className="bg-red-700 text-white p-2 rounded-sm"
-                onClick={() => handleDeleteTweet(tweet._id)}
-              >
-                Delete Tweet
-              </button>
-            </div>
-          )}
-        </div>
-      ))}
+        ))}
     </div>
   );
 };

@@ -10,6 +10,8 @@ const Channel = () => {
   const user = useSelector((store) => store.user.loggedInUserDetails);
   const { channelId } = useParams();
   const [channel, setChannel] = useState(null);
+  const highlightPlaylist = window.location.pathname.includes("playlist");
+  const highlightTweet = window.location.pathname.includes("tweet");
 
   if (!localStorage.getItem("isLoggedIn")) {
     return "Please log in to see your channel";
@@ -17,7 +19,7 @@ const Channel = () => {
 
   useEffect(() => {
     fetchChannelDetails(channelId, setChannel);
-  }, []);
+  }, [channelId]);
 
   if (!channel) {
     return "loading...";
@@ -71,8 +73,8 @@ const Channel = () => {
           </div>
           {user._id === channelId && (
             <Link
-              to={`/channel/edit/`}
-              className="bg-gray-300 p-2 rounded-lg w-40 hover:bg-gray-200"
+              to="/channel/edit"
+              className="border-2 border-blue-700 p-2 rounded-lg w-40 hover:bg-blue-700"
             >
               Customize channel
             </Link>
@@ -90,19 +92,30 @@ const Channel = () => {
 
       <div className="border mt-3 p-2 font-semibold text-lg">
         <Link
-          className="py-2 mr-5 hover:border-b-2 hover:border-black"
+          className={
+            "py-2 mr-5 hover:border-b-2 hover:border-white " +
+            (!(highlightPlaylist || highlightTweet)
+              ? "border-b-4 border-white"
+              : "")
+          }
           to={`/channel/${channelId}`}
         >
           Videos
         </Link>
         <Link
-          className="py-2 mr-5 hover:border-b-2 hover:border-black"
+          className={
+            "py-2 mr-5 hover:border-b-2 hover:border-white " +
+            (highlightPlaylist ? "border-b-4 border-white" : "")
+          }
           to={`/channel/${channelId}/playlists`}
         >
           Playlists
         </Link>
         <Link
-          className="py-2 mr-5 hover:border-b-2 hover:border-black"
+          className={
+            "py-2 mr-5 hover:border-b-2 hover:border-white " +
+            (highlightTweet ? "border-b-4 border-white" : "")
+          }
           to={`/channel/${channelId}/tweets`}
         >
           Tweets
