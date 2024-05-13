@@ -5,6 +5,8 @@ import { useParams } from "react-router-dom";
 import convertDuration from "../../helpers/convertDuration";
 import timeDifference from "../../helpers/timeDifference";
 import { useSelector } from "react-redux";
+import convertViews from "../../helpers/convertViews";
+
 
 const Playlist = () => {
   const user = useSelector((store) => store.user.loggedInUserDetails);
@@ -56,13 +58,13 @@ const Playlist = () => {
       <div className="mb-2">
         <h1 className="text-4xl mb-2">{playlist.name}</h1>
         <h3 className="text-2xl mb-2">{playlist.owner.username}</h3>
-        <h3 className="font-semibold text-gray-600">{videosCount} videos</h3>
+        <h3 className="font-semibold text-gray-400">{videosCount} videos</h3>
       </div>
 
       {playlist.videos.map((video) => (
         <div
           key={video._id}
-          className="flex mb-5 border w-full justify-between"
+          className="flex mb-5 w-full justify-between hover:bg-white hover:bg-opacity-20 rounded-md"
         >
           <div className="flex">
             <div>
@@ -82,7 +84,7 @@ const Playlist = () => {
               <div className="font-semibold mt-1">{video.title}</div>
               <div className="flex mt-2">
                 <div className="mr-2">{video.owner.username} .</div>
-                <div className="mr-2">{video.views} views .</div>
+                <div className="mr-2">{convertViews(video.views)} views .</div>
                 <div>{timeDifference(video.createdAt)} ago</div>
               </div>
             </div>

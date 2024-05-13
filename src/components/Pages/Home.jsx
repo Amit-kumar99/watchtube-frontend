@@ -3,6 +3,7 @@ import { BACKEND_URL_PREFIX } from "../../constants";
 import { Link } from "react-router-dom";
 import timeDifference from "../../helpers/timeDifference";
 import convertDuration from "../../helpers/convertDuration";
+import convertViews from "../../helpers/convertViews";
 
 const Home = () => {
   const [videos, setVideos] = useState([]);
@@ -56,7 +57,7 @@ const Home = () => {
                     </Link>
                   </div>
                   <div className="flex">
-                    <div className="mr-2">{video.views} views .</div>
+                    <div className="mr-2">{convertViews(video.views)} views .</div>
                     <div>{timeDifference(video.createdAt)} ago</div>
                   </div>
                 </div>

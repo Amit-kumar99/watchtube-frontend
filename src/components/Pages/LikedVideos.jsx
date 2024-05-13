@@ -4,6 +4,7 @@ import { BACKEND_URL_PREFIX } from "../../constants";
 import { Link } from "react-router-dom";
 import convertDuration from "../../helpers/convertDuration";
 import timeDifference from "../../helpers/timeDifference";
+import convertViews from "../../helpers/convertViews";
 
 const LikedVideos = () => {
   const [likedVideos, setLikedVideos] = useState(null);
@@ -66,7 +67,7 @@ const LikedVideos = () => {
               <Link to={`/channel/${video.likedVideos[0].owner[0]._id}`} className="mr-2 font-semibold text-gray-400 hover:text-gray-300">
                 {video.likedVideos[0].owner[0].username} .
               </Link>
-              <div className="mr-2">{video.likedVideos[0].views} views .</div>
+              <div className="mr-2">{convertViews(video.likedVideos[0].views)} views .</div>
               <div>{timeDifference(video.likedVideos[0].createdAt)} ago</div>
             </div>
           </div>

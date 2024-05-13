@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { BACKEND_URL_PREFIX } from "../../constants";
 import { Link } from "react-router-dom";
 import convertDuration from "../../helpers/convertDuration";
+import convertViews from "../../helpers/convertViews";
 
 const History = () => {
   const [watchedVideos, setWatchedVideos] = useState(null);
@@ -52,7 +53,7 @@ const History = () => {
                 <div className=" mt-1 text-2xl">{video.title}</div>
                 <div className="text-gray-500 text-sm mt-1">
                   <span className="font-semibold mr-2">{video.owner[0].username} .</span>
-                  <span className="mr-2">{video.views} views</span>
+                  <span className="mr-2">{convertViews(video.views)} views</span>
                 </div>
                 <div className="text-gray-500 text-sm mt-2 w-full">{video.description}</div>
               </div>
