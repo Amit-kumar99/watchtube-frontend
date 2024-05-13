@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { GoHome } from "react-icons/go";
 import { MdFileUpload } from "react-icons/md";
 import { FaHistory } from "react-icons/fa";
@@ -12,63 +12,56 @@ import useLogout from "../../customHooks/useLogout";
 const Sidebar = () => {
   const user = useSelector((store) => store.user.loggedInUserDetails);
   const logout = useLogout();
+  const location = useLocation();
 
   const handleLogout = async () => {
     await logout();
-  }
+  };
+
+  const links = [
+    { to: "/", icon: <GoHome />, text: "Home" },
+    { to: "/content", icon: <MdFileUpload />, text: "Upload Content" },
+    { to: "/history", icon: <FaHistory />, text: "History" },
+    { to: "/subscribers", icon: <FaUsers />, text: "Subscribers" },
+    { to: "/subscriptions", icon: <FaUsers />, text: "Subscriptions" },
+    { to: "/likedVideos", icon: <SlLike />, text: "Liked Videos" },
+  ];
 
   return (
-    <div className="w-[20vw] h-[90vh] border p-2 mx-5 font-semibold">
-      <Link to="/">
-        <div className="hover:bg-white hover:bg-opacity-20 flex items-center pl-3 py-3">
-          <GoHome />
-          <span className="pl-5">Home</span>
-        </div>
-      </Link>
-      <Link to="/content">
-        <div className="hover:bg-white hover:bg-opacity-20 flex items-center pl-3 py-3">
-          <MdFileUpload />
-          <span className="pl-5">Upload Content</span>
-        </div>
-      </Link>
-      <Link to="/history">
-        <div className="hover:bg-white hover:bg-opacity-20 flex items-center pl-3 py-3">
-          <FaHistory />
-          <span className="pl-5">History</span>
-        </div>
-      </Link>
-      <Link to="/subscribers">
-        <div className="hover:bg-white hover:bg-opacity-20 flex items-center pl-3 py-3">
-          <FaUsers />
-          <span className="pl-5">Subscribers</span>
-        </div>
-      </Link>
-      <Link to="/subscriptions">
-        <div className="hover:bg-white hover:bg-opacity-20 flex items-center pl-3 py-3">
-          <FaUsers />
-          <span className="pl-5">Subscriptions</span>
-        </div>
-      </Link>
-      <Link to="/likedVideos">
-        <div className="hover:bg-white hover:bg-opacity-20 flex items-center pl-3 py-3">
-          <SlLike />
-          <span className="pl-5">Liked Videos</span>
-        </div>
-      </Link>
+    <div className="w-[20vw] h-[90vh] border border-gray-500 mr-5 font-semibold">
+      {links.map((link, index) => (
+        <Link
+          key={index}
+          to={link.to}
+          className={`hover:bg-white hover:bg-opacity-20 flex items-center pl-3 py-3 ${
+            (link.to === "/" && location.pathname === "/") ||
+            (location.pathname.includes(link.to) && link.to !== "/")
+              ? "bg-white bg-opacity-20"
+              : ""
+          }`}
+        >
+          {link.icon}
+          <span className="pl-5">{link.text}</span>
+        </Link>
+      ))}
       {user && (
-        <Link to={`/channel/${user._id}`}>
-          <div className="hover:bg-white hover:bg-opacity-20 flex items-center pl-3 py-3">
-            <FaRegUser />
-            <span className="pl-5">My Channel</span>
-          </div>
+        <Link
+          to={`/channel/${user._id}`}
+          className="hover:bg-white hover:bg-opacity-20 flex items-center pl-3 py-3"
+        >
+          <FaRegUser />
+          <span className="pl-5">My Channel</span>
         </Link>
       )}
-      {localStorage.getItem("isLoggedIn") && (<button className="w-full" onClick={handleLogout}>
-        <div className="hover:bg-white hover:bg-opacity-20 flex items-center w-full pl-3 py-3">
+      {localStorage.getItem("isLoggedIn") && (
+        <button
+          onClick={handleLogout}
+          className="w-full hover:bg-white hover:bg-opacity-20 flex items-center pl-3 py-3"
+        >
           <BiLogOut />
           <span className="pl-5">Logout</span>
-        </div>
-      </button>)}
+        </button>
+      )}
     </div>
   );
 };

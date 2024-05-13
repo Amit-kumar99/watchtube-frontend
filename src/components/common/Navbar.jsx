@@ -13,10 +13,10 @@ const Navbar = () => {
   };
 
   return (
-    <div className="flex my-2 justify-between h-[5vh] border">
+    <div className="flex mb-2 py-1 justify-between h-[7vh] border border-gray-500">
       <div className="flex">
         <button
-          className="mx-5 py-1 px-2 hover:bg-gray-200"
+          className="mx-5 py-1 px-2 hover:bg-blue-300"
           onClick={handleToggleSidebar}
         >
           <img className="w-7" src={toggleIcon} alt="toggle-img" />

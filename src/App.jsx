@@ -28,7 +28,7 @@ function App() {
   }, []);
 
   return (
-    <div>
+    <div className="bg-black bg-opacity-90 text-white min-h-[100vh]">
       <Navbar />
       <div className="flex">
         {showSidebar && <Sidebar />}

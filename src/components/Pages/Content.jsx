@@ -58,15 +58,15 @@ const Content = () => {
   };
 
   return (
-    <div className="border w-full mx-5">
+    <div className="w-full mx-5">
       <form
-        className="border-2 w-4/12 mx-auto mt-10 flex flex-col p-10"
+        className="border border-gray-500 rounded-md w-4/12 mx-auto mt-10 flex flex-col p-10"
         onSubmit={(e) => e.preventDefault()}
       >
         <div className="py-7 my-2 w-full border border-blue-700">
           <label
             htmlFor="video"
-            className="w-4/12 font-semibold text-white ml-32 p-2 hover:bg-blue-500 cursor-pointer bg-blue-700"
+            className="w-4/12 text-white ml-32 p-2 hover:bg-blue-600 cursor-pointer bg-blue-700"
           >
             Select Video
           </label>
@@ -89,7 +89,7 @@ const Content = () => {
         >
           <label
             htmlFor="thumbnail"
-            className="w-4/12 font-semibold ml-20 p-2 text-blue-700 text-xl hover:bg-blue-700 hover:text-white cursor-pointer"
+            className="w-4/12 ml-20 p-2 bg-blue-700 hover:bg-blue-600 cursor-pointer"
           >
             Choose Video Thumbnail
           </label>
@@ -104,14 +104,14 @@ const Content = () => {
 
         <div>
           <input
-            className="w-full p-2 border outline-none mb-3"
+            className="w-full p-2 outline-none my-3 bg-black bg-opacity-0 border-b"
             type="text"
             value={videoTitle}
             onChange={(e) => setVideoTitle(e.target.value)}
             placeholder="Enter video title"
           />
           <textarea
-            className="w-full p-2 border outline-none h-24"
+            className="w-full border p-2 h-24 bg-black bg-opacity-0"
             type="text"
             value={videoDescription}
             onChange={(e) => setVideoDescription(e.target.value)}
@@ -120,7 +120,7 @@ const Content = () => {
         </div>
 
         <button
-          className="bg-blue-700 text-white px-4 py-2 mt-3"
+          className="bg-blue-700 text-white px-4 py-2 mt-3 font-semibold"
           onClick={handleVideoUpload}
         >
           Upload Video

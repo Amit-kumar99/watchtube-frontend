@@ -31,11 +31,11 @@ const History = () => {
 
   return (
     <div className="flex w-full ml-5">
-      <div className="w-7/12 mr-10 border">
-        <h1 className="font-semibold text-3xl border mb-7">Watch History</h1>
+      <div className="w-7/12 mr-10">
+        <h1 className="font-semibold text-3xl mb-7 mt-5">Watch History</h1>
         <div>
           {watchedVideos.map((video) => (
-            <Link to={`/watch?v=${video._id}`} key={video._id} className="border w-full flex mb-5">
+            <Link to={`/watch?v=${video._id}`} key={video._id} className="w-full flex mb-5 hover:bg-white hover:bg-opacity-20 rounded-md py-2">
               <div className="w-4/12">
                 <div className="absolute bg-black text-white py-1 px-2 rounded-md">
                   {convertDuration(Math.floor(video.duration))}

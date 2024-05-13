@@ -36,7 +36,7 @@ const Subscriptions = () => {
         {subscriptions.map((subscription) => (
           <Link
             to={`/channel/${subscription.channels[0]._id}`}
-            className="bg-gray-300 rounded-md flex py-2 px-3 items-center justify-center mr-2"
+            className="border border-blue-700 hover:bg-blue-800 rounded-md flex py-2 px-3 items-center justify-center mr-3"
             key={subscription._id}
           >
             <div>

@@ -98,7 +98,7 @@ const Playlists = () => {
       {/* edit Playlist form */}
       {showEditPlaylistForm && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
-          <div className="bg-white p-5 rounded shadow-lg w-3/12">
+          <div className="bg-black p-5 rounded shadow-lg w-3/12">
             <button
               className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4 mx-5"
               onClick={() => {
@@ -109,7 +109,7 @@ const Playlists = () => {
               Close
             </button>
             <input
-              className="border-b outline-none focus:border-b-2 focus:border-black"
+              className="bg-black border-b outline-none focus:border-b-2 focus:border-white"
               type="text"
               value={playlistName}
               onChange={(e) => setPlaylistName(e.target.value)}
@@ -126,12 +126,12 @@ const Playlists = () => {
       )}
 
       {playlists.map((playlist) => (
-        <div key={playlist._id} className="border w-3/12 mr-5 mb-3">
+        <div key={playlist._id} className="border border-gray-500 p-2 w-3/12 mr-5 mb-3">
           <div className="font-semibold mt-1">{playlist.name}</div>
           <div className="mr-2">{playlist.videosCount} videos</div>
           <div>Updated {timeDifference(playlist.updatedAt)} ago</div>
           <div>
-            <Link className="font-semibold" to={`/playlist/${playlist._id}`}>
+            <Link className="font-semibold hover:text-gray-400" to={`/playlist/${playlist._id}`}>
               View Full Playlist
             </Link>
           </div>

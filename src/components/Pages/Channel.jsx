@@ -48,12 +48,12 @@ const Channel = () => {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full mx-10">
       <div>
         <img className="w-full h-44" src={channel.coverImage} alt="avatar" />
       </div>
 
-      <div className="flex border mt-2">
+      <div className="flex my-5">
         <div className="mr-5">
           <img
             className="w-44 h-44 rounded-full"
@@ -74,14 +74,14 @@ const Channel = () => {
           {user._id === channelId && (
             <Link
               to="/channel/edit"
-              className="border-2 border-blue-700 p-2 rounded-lg w-40 hover:bg-blue-700"
+              className="border-2 border-blue-700 p-2 rounded-lg w-40 hover:bg-blue-800"
             >
               Customize channel
             </Link>
           )}
           {user._id !== channelId && (
             <button
-              className="bg-gray-300 p-2 rounded-lg w-24 hover:bg-gray-200"
+              className="bg-blue-800 p-2 rounded-lg w-24 hover:bg-blue-600"
               onClick={handleToggleSubscription}
             >
               {channel.isSubscribed ? "Subscribed" : "Subscribe"}
@@ -90,7 +90,7 @@ const Channel = () => {
         </div>
       </div>
 
-      <div className="border mt-3 p-2 font-semibold text-lg">
+      <div className="border-b mt-3 p-2 font-semibold text-lg">
         <Link
           className={
             "py-2 mr-5 hover:border-b-2 hover:border-white " +
@@ -122,7 +122,7 @@ const Channel = () => {
         </Link>
       </div>
 
-      <div className="border mt-3">
+      <div className="mt-3">
         <Outlet />
       </div>
     </div>

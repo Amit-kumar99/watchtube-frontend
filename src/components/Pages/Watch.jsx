@@ -3,10 +3,10 @@ import { Link, useSearchParams } from "react-router-dom";
 import { BACKEND_URL_PREFIX } from "../../constants";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import LikeIcon from "../../../assets/likeIcon.png";
-import LikedIcon from "../../../assets/likedIcon.png";
 import ReactPlayer from "react-player";
 import timeDifference from "../../helpers/timeDifference";
+import { BiSolidLike } from "react-icons/bi";
+import { BiLike } from "react-icons/bi";
 
 const Watch = () => {
   const user = useSelector((store) => store.user.loggedInUserDetails);
@@ -244,13 +244,13 @@ const Watch = () => {
   }
 
   return (
-    <div className="border w-[50vw] h-[90vh] overflow-y-scroll">
-      <div className="w-full border border-black">
+    <div className="w-[50vw] h-[90vh] overflow-y-scroll px-2">
+      <div className="w-full">
         <ReactPlayer url={video.videoFile} width="830px" controls={true} />
 
         <div>
-          <div className="font-semibold text-xl">{video.title}</div>
-          <div className="flex mt-3 border items-center">
+          <div className="font-semibold text-xl my-2">{video.title}</div>
+          <div className="flex mt-3 items-center">
             <div className="mr-3">
               <Link to={`/channel/${video.owner[0]._id}`}>
                 <img
@@ -271,30 +271,26 @@ const Watch = () => {
             </div>
             {user._id !== video.owner[0]._id && (
               <button
-                className="font-semibold bg-gray-300 px-5 py-2 rounded-full hover:bg-gray-200"
+                className="font-semibold bg-blue-800 hover:bg-blue-600 px-5 py-2 rounded-full"
                 onClick={handleToggleSubscribe}
               >
                 {video.isSubscribed ? "Subscribed" : "Subscribe"}
               </button>
             )}
 
-            <div className="ml-auto flex border">
-              <div className="mr-2 bg-gray-400 p-1 rounded-md my-2 flex">
+            <div className="ml-auto flex mr-2">
+              <div className="mr-2 border border-gray-400 p-2 rounded-md my-2 flex items-center">
                 <span className="text-white mr-1">{video.likesCount}</span>
                 <span
                   className={"cursor-pointer"}
                   onClick={handleToggleVideoLike}
                 >
-                  <img
-                    className="w-5"
-                    src={video.isLiked ? LikedIcon : LikeIcon}
-                    alt="like-icon"
-                  />
+                  {video.isLiked ? <BiSolidLike /> : <BiLike />}
                 </span>
               </div>
             </div>
             <button
-              className="p-2 bg-blue-700 text-white font-semibold"
+              className="p-2 bg-blue-800 hover:bg-blue-600 text-white font-semibold mr-2"
               onClick={handleShowPlaylists}
             >
               Save To Playlist
@@ -302,10 +298,10 @@ const Watch = () => {
           </div>
         </div>
 
-        {/* all playlists */}
+        {/* all playlists popup*/}
         {showPlaylists && (
           <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
-            <div className="bg-white p-5 rounded shadow-lg w-3/12">
+            <div className="bg-black p-5 rounded shadow-lg w-3/12">
               <button
                 className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4 w-full"
                 onClick={() => {
@@ -361,7 +357,7 @@ const Watch = () => {
           </div>
         )}
 
-        <div className="bg-gray-300 mt-5 p-2 rounded-md">
+        <div className="border border-gray-300 mt-5 p-2 rounded-md">
           <div className="flex font-semibold">
             <div className="mr-3">{video.views} views</div>
             <div>{timeDifference(video.createdAt)} ago</div>
@@ -369,7 +365,7 @@ const Watch = () => {
           <div>{video.description}</div>
         </div>
 
-        <h1 className="mt-2 font-semibold text-xl mb-2">
+        <h1 className="mt-3 font-semibold text-xl mb-2">
           {commentsCountUI} Comments
         </h1>
 
@@ -381,7 +377,7 @@ const Watch = () => {
           />
           <input
             className={
-              "border-b w-full outline-none focus:border-black focus:border-b-2" +
+              "bg-black bg-opacity-10 border-b w-full outline-none focus:border-white focus:border-b-2 mx-2 p-2" +
               (!localStorage.getItem("isLoggedIn")
                 ? " placeholder-red-500"
                 : "")
@@ -405,11 +401,11 @@ const Watch = () => {
           </button>
         </form>
 
-        <div className="mt-2 border">
+        <div className="mt-2">
           <div>
             {comments &&
               comments.map((comment) => (
-                <div className="border" key={comment._id}>
+                <div className="border-b py-3" key={comment._id}>
                   <div className="flex p-2">
                     <div className="mr-2">
                       <Link to={`/channel/${comment.owner[0]._id}`}>
@@ -427,22 +423,18 @@ const Watch = () => {
                             {comment.owner[0].username}
                           </div>
                         </Link>
-                        <div className="text-xs mt-[2px] text-gray-600">
+                        <div className="text-xs mt-[2px] text-gray-400">
                           {timeDifference(comment.createdAt)} ago
                         </div>
                       </div>
                       <div>{comment.content}</div>
-                      <div className="flex">
+                      <div className="flex items-center">
                         <span className="mr-1">{comment.likesCount}</span>
                         <span
                           className="cursor-pointer"
                           onClick={() => handleToggleCommentLike(comment._id)}
                         >
-                          <img
-                            className="w-5"
-                            src={comment.isLiked ? LikedIcon : LikeIcon}
-                            alt="like-icon"
-                          />
+                          {comment.isLiked ? <BiSolidLike /> : <BiLike />}
                         </span>
                       </div>
                     </div>

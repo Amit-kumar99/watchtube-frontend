@@ -18,14 +18,14 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="border w-full ml-10">
-      <div className="flex flex-wrap border w-full">
+    <div className="w-full ml-10">
+      <div className="flex flex-wrap w-full">
         {videos.length !== 0 &&
           videos.map((video) => (
             <Link
               to={`/watch?v=${video._id}`}
               key={video._id}
-              className="border w-[31%] mr-5 mb-5"
+              className="w-[31%] mr-5 mb-5"
             >
               <div className="absolute bg-black text-white p-1">
                 {convertDuration(Math.floor(video.duration))}
@@ -38,19 +38,19 @@ const Home = () => {
                 />
               </div>
               <div className="flex mt-2">
-                <div className="mr-2">
+                <Link to={`/channel/${video.owner[0]._id}`} className="mr-2">
                   <img
                     className="w-10 h-10 rounded-full"
                     src={video.owner[0].avatar}
                     alt="avatar"
                   />
-                </div>
+                </Link>
                 <div>
                   <div className="font-semibold text-lg">{video.title}</div>
                   <div>
                     <Link
                       to={`/channel/${video.owner[0]._id}`}
-                      className="font-semibold text-gray-600 hover:text-gray-400"
+                      className="font-semibold text-gray-400 hover:text-gray-300"
                     >
                       {video.owner[0].username}
                     </Link>

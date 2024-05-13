@@ -2,10 +2,9 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { BACKEND_URL_PREFIX } from "../../constants";
 import { useParams } from "react-router-dom";
-import LikedIcon from "../../../assets/likedIcon.png";
-import LikeIcon from "../../../assets/likeIcon.png";
 import { useSelector } from "react-redux";
 import timeDifference from "../../helpers/timeDifference";
+import { BiLike, BiSolidLike } from "react-icons/bi";
 
 const Tweets = () => {
   const user = useSelector((store) => store.user.loggedInUserDetails);
@@ -140,7 +139,7 @@ const Tweets = () => {
       {/* edit tweet form */}
       {showEditTweetForm && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
-          <div className="bg-white p-5 rounded shadow-lg w-3/12">
+          <div className="bg-black p-5 rounded shadow-lg w-3/12">
             <button
               className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4"
               onClick={() => {
@@ -151,7 +150,7 @@ const Tweets = () => {
               Close
             </button>
             <textarea
-              className="border mx-5 h-36"
+              className="border mx-5 h-36 bg-black p-2"
               value={tweetContent}
               onChange={(e) => setTweetContent(e.target.value)}
               placeholder="Enter your tweet"
@@ -168,7 +167,7 @@ const Tweets = () => {
 
       {/* create tweet form */}
       <form
-        className="my-3 border w-10/12 flex py-2"
+        className="w-10/12 flex py-5 my-5"
         onSubmit={(e) => e.preventDefault()}
       >
         <img
@@ -177,7 +176,7 @@ const Tweets = () => {
           alt="avatar"
         />
         <input
-          className="border w-11/12 p-2 mr-2"
+          className="border w-11/12 p-2 mr-2 bg-black bg-opacity-0 rounded-md"
           type="text"
           value={tweet}
           onChange={(e) => setTweet(e.target.value)}
@@ -197,7 +196,7 @@ const Tweets = () => {
         tweets.map((tweet) => (
           <div
             key={tweet._id}
-            className="border w-8/12 flex p-5 rounded-md mb-5"
+            className="border border-gray-500 w-8/12 flex p-5 rounded-md mb-5"
           >
             <div className="mr-3">
               <img
@@ -216,13 +215,10 @@ const Tweets = () => {
 
               <div>{tweet.content}</div>
 
-              <div className="flex">
+              <div className="flex items-center">
                 <span className="mr-1">{tweet.likesCount}</span>
                 <span onClick={() => handleToggleTweetLike(tweet._id)}>
-                  <img
-                    className="w-5 cursor-pointer"
-                    src={tweet.isLiked ? LikedIcon : LikeIcon}
-                  />
+                {tweet.isLiked ? <BiSolidLike /> : <BiLike />}
                 </span>
               </div>
             </div>

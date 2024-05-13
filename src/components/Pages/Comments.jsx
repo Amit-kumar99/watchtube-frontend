@@ -36,8 +36,8 @@ const Comments = () => {
       <h1 className="text-4xl my-5">Your Comments History</h1>
       <div className="w-full">
         {comments.map((comment) => (
-          <div key={comment._id} className="border mb-5 w-full">
-            <div className="bg-gray-300 p-3 rounded-lg w-full">{convertToDateOnly(comment.createdAt)}</div>
+          <div key={comment._id} className="mb-5 w-full">
+            <div className="bg-blue-500 p-3 rounded-lg w-full">{convertToDateOnly(comment.createdAt)}</div>
             <div className="flex w-full py-3">
               <div className="mr-5 w-7/12 flex flex-col justify-between">
                 <div className="font-semibold">{comment.content}</div>
