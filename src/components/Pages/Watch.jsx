@@ -7,6 +7,7 @@ import ReactPlayer from "react-player";
 import timeDifference from "../../helpers/timeDifference";
 import { BiSolidLike } from "react-icons/bi";
 import { BiLike } from "react-icons/bi";
+import { toast } from "react-toastify";
 
 const Watch = () => {
   const user = useSelector((store) => store.user.loggedInUserDetails);
@@ -61,7 +62,7 @@ const Watch = () => {
         : prevVideo.subscribersCount + 1,
     }));
 
-    await axios.post(
+    const res = await axios.post(
       `${BACKEND_URL_PREFIX}/subscriptions/${video.owner[0]._id}`,
       {},
       {
@@ -71,6 +72,11 @@ const Watch = () => {
         },
       }
     );
+    if (res.data.statusCode === 200) {
+      toast(res.data.message);
+    } else {
+      toast("Toggling subscription failed");
+    }
   };
 
   const handleToggleVideoLike = async () => {
@@ -83,7 +89,7 @@ const Watch = () => {
         : prevVideo.likesCount + 1,
     }));
 
-    await axios.post(
+    const res = await axios.post(
       `${BACKEND_URL_PREFIX}/likes/toggleVideoLike/${video._id}`,
       {},
       {
@@ -93,6 +99,11 @@ const Watch = () => {
         },
       }
     );
+    if (res.data.statusCode === 200) {
+      toast(res.data.message);
+    } else {
+      toast("Toggling like failed");
+    }
   };
 
   const handleAddComment = async () => {
@@ -112,8 +123,8 @@ const Watch = () => {
         },
       }
     );
+    setCommentUI("");
     // immediately updating UI
-    console.log(res.data);
     if (res.data.statusCode === 200) {
       const newComment = {
         ...res.data.data,
@@ -129,6 +140,11 @@ const Watch = () => {
       };
       setComments((prevComments) => [...prevComments, newComment]);
       setCommentsCountUI((prevCount) => prevCount + 1);
+      if (res.data.statusCode === 200) {
+        toast("Comment added successfully");
+      } else {
+        toast("Could not add comment. Please try again.");
+      }
     }
   };
 
@@ -137,12 +153,17 @@ const Watch = () => {
     setComments(comments.filter((comment) => comment._id !== commentId));
     setCommentsCountUI((prevCount) => prevCount - 1);
 
-    await axios.delete(
+    const res = await axios.delete(
       `${BACKEND_URL_PREFIX}/comments/deleteVideoComment/${videoId}/${commentId}`,
       {
         withCredentials: true,
       }
     );
+    if (res.data.statusCode === 200) {
+      toast("comment deleted successfully");
+    } else {
+      toast("comment deletion failed");
+    }
   };
 
   const handleToggleCommentLike = async (commentId) => {
@@ -161,7 +182,7 @@ const Watch = () => {
       )
     );
 
-    await axios.post(
+    const res = await axios.post(
       `${BACKEND_URL_PREFIX}/likes/toggleCommentLike/${commentId}`,
       {},
       {
@@ -171,6 +192,11 @@ const Watch = () => {
         },
       }
     );
+    if (res.data.statusCode === 200) {
+      toast(res.data.message);
+    } else {
+      toast("Toggling comment like failed");
+    }
   };
 
   const fetchPlaylists = async () => {
@@ -209,7 +235,9 @@ const Watch = () => {
       }
     );
     if (res.data.statusCode === 200) {
-      alert(`video added/removed to/from ${playlistName}`);
+      toast(res.data.message);
+    } else {
+      toast("Toggling video to playlist failed");
     }
   };
 
@@ -234,9 +262,10 @@ const Watch = () => {
       }
     );
     if (res.data.statusCode !== 200) {
-      alert("playlist creation failed");
+      toast("playlist creation failed");
+    } else {
+      toast("playlist created and video added successfully");
     }
-    alert("playlist created and video added successfully");
   };
 
   if (!video) {
@@ -339,7 +368,7 @@ const Watch = () => {
               {showNewPlaylistForm && (
                 <div className="mt-5">
                   <input
-                    className="border w-full p-2 outline-none mb-2"
+                    className="border-b focus:border-b-2 w-full p-2 outline-none mb-2 bg-black"
                     type="text"
                     placeholder="Enter playlist name"
                     value={playlistName}

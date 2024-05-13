@@ -6,6 +6,8 @@ import { useEffect } from "react";
 import { login } from "./store/userSlice";
 import axios from "axios";
 import { BACKEND_URL_PREFIX } from "./constants";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const dispatch = useDispatch();
@@ -34,6 +36,7 @@ function App() {
         {showSidebar && <Sidebar />}
         <Outlet />
       </div>
+      <ToastContainer autoClose={2000} />
     </div>
   );
 }

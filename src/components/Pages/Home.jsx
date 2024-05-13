@@ -4,14 +4,14 @@ import { Link } from "react-router-dom";
 import timeDifference from "../../helpers/timeDifference";
 import convertDuration from "../../helpers/convertDuration";
 import convertViews from "../../helpers/convertViews";
+import axios from "axios";
 
 const Home = () => {
   const [videos, setVideos] = useState([]);
 
   const fetchVideos = async () => {
-    const data = await fetch(`${BACKEND_URL_PREFIX}/videos/getAll`);
-    const res = await data.json();
-    setVideos(res.data.videos);
+    const res = await axios.get(`${BACKEND_URL_PREFIX}/videos/getAll`);
+    setVideos(res.data.data.videos);
   };
 
   useEffect(() => {

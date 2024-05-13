@@ -4,6 +4,7 @@ import { BACKEND_URL_PREFIX } from "../../constants";
 import { Link, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import timeDifference from "../../helpers/timeDifference";
+import { toast } from "react-toastify";
 
 const Playlists = () => {
   const user = useSelector((store) => store.user.loggedInUserDetails);
@@ -57,10 +58,9 @@ const Playlists = () => {
           : playlist
       )
     );
-
     setShowEditPlaylistForm(false);
 
-    await axios.patch(
+    const res = await axios.patch(
       `${BACKEND_URL_PREFIX}/playlists/update/${editPlaylistId}`,
       {
         name: playlistName,
@@ -72,6 +72,11 @@ const Playlists = () => {
         },
       }
     );
+    if (res.data.statusCode === 200) {
+      toast("playlist edited successfully");
+    } else {
+      toast("playlist editing failed. Please try again.");
+    }
   };
 
   const handleDeletePlaylist = async (playlistId) => {
@@ -80,9 +85,14 @@ const Playlists = () => {
       prevPlaylist.filter((playlist) => playlist._id !== playlistId)
     );
 
-    await axios.delete(`${BACKEND_URL_PREFIX}/playlists/delete/${playlistId}`, {
+    const res = await axios.delete(`${BACKEND_URL_PREFIX}/playlists/delete/${playlistId}`, {
       withCredentials: true,
     });
+    if (res.data.statusCode === 200) {
+      toast("playlist deleted successfully");
+    } else {
+      toast("playlist deletion failed. Please try again.");
+    }
   };
 
   if (!playlists) {
@@ -126,12 +136,18 @@ const Playlists = () => {
       )}
 
       {playlists.map((playlist) => (
-        <div key={playlist._id} className="border border-gray-500 p-2 w-3/12 mr-5 mb-3">
+        <div
+          key={playlist._id}
+          className="border border-gray-500 p-2 w-3/12 mr-5 mb-3"
+        >
           <div className="font-semibold mt-1">{playlist.name}</div>
           <div className="mr-2">{playlist.videosCount} videos</div>
           <div>Updated {timeDifference(playlist.updatedAt)} ago</div>
           <div>
-            <Link className="font-semibold hover:text-gray-400" to={`/playlist/${playlist._id}`}>
+            <Link
+              className="font-semibold hover:text-gray-400"
+              to={`/playlist/${playlist._id}`}
+            >
               View Full Playlist
             </Link>
           </div>

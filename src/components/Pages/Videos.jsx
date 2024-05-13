@@ -6,6 +6,8 @@ import { useSelector } from "react-redux";
 import timeDifference from "../../helpers/timeDifference";
 import convertUrlToFile from "../../helpers/convertUrlToFile";
 import convertDuration from "../../helpers/convertDuration";
+import convertViews from "../../helpers/convertViews";
+import { toast } from "react-toastify";
 
 const Videos = () => {
   const user = useSelector((store) => store.user.loggedInUserDetails);
@@ -71,6 +73,7 @@ const Videos = () => {
           : video
       )
     );
+    setShowEditVideoForm(false);
 
     let formData = new FormData();
     formData.append("title", videoTitle);
@@ -87,8 +90,10 @@ const Videos = () => {
       }
     );
     if (res.data.statusCode === 200) {
+      toast("video edited successfully");
+    } else {
+      toast("Video editing failed. Please try again.");
     }
-    setShowEditVideoForm(false);
   };
 
   const handleDeleteVideo = async (e, videoId) => {
@@ -98,9 +103,15 @@ const Videos = () => {
       prevVideos.filter((video) => video._id !== videoId)
     );
 
-    await axios.delete(`${BACKEND_URL_PREFIX}/videos/delete/${videoId}`, {
+    const res = await axios.delete(`${BACKEND_URL_PREFIX}/videos/delete/${videoId}`, {
       withCredentials: true,
     });
+
+    if (res.data.statusCode === 200) {
+      toast("video deleted successfully");
+    } else {
+      toast("Video deletion failed. Please try again.");
+    }
   };
 
   const handleThumbnailChange = (e) => {
@@ -201,7 +212,7 @@ const Videos = () => {
           </div>
           <div className="font-semibold mt-1">{video.title}</div>
           <div className="flex">
-            <div className="mr-1">{video.views} views .</div>
+            <div className="mr-1">{convertViews(video.views)} views .</div>
             <div>{timeDifference(video.createdAt)} ago</div>
           </div>
           <div className="text-gray-500 text-sm">{video.description}</div>

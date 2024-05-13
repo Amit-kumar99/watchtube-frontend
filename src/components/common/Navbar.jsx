@@ -13,7 +13,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="flex mb-2 py-1 justify-between h-[7vh] border border-gray-500">
+    <div className="flex items-center mb-2 py-1 justify-between h-[7vh] border border-gray-500">
       <div className="flex">
         <button
           className="mx-5 py-1 px-2 hover:bg-blue-300"
@@ -36,7 +36,7 @@ const Navbar = () => {
           </Link>
         ) : (
           <Link
-            className="border rounded-full p-2 font-semibold hover:bg-blue-100"
+            className="border border-blue-400 rounded-full p-2 font-semibold hover:bg-blue-400"
             to="/auth"
           >
             Sign in

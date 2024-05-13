@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { BACKEND_URL_PREFIX } from "../../constants";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const Content = () => {
   const [thumbnailFile, setThumbnailFile] = useState(null);
@@ -33,7 +34,7 @@ const Content = () => {
 
   const handleVideoUpload = async () => {
     if (!thumbnailFile || !videoFile || !videoTitle.trim()) {
-      alert("video thumbnail, title, description are required");
+      toast("video thumbnail, title, description are required");
       return;
     }
 
@@ -53,7 +54,9 @@ const Content = () => {
     );
 
     if (res.data.statusCode === 200) {
-      alert("video uploaded successfully");
+      toast("video uploaded successfully");
+    } else {
+      toast("Failed to upload video. Please try again later.");
     }
   };
 
@@ -84,7 +87,7 @@ const Content = () => {
           className="py-20 my-2 w-full border border-blue-700"
           style={{
             backgroundImage: `url(${thumbnailUrl})`,
-            backgroundSize: "cover",
+            backgroundSize: "100% 100%",
           }}
         >
           <label

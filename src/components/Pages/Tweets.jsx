@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import timeDifference from "../../helpers/timeDifference";
 import { BiLike, BiSolidLike } from "react-icons/bi";
+import { toast } from "react-toastify";
 
 const Tweets = () => {
   const user = useSelector((store) => store.user.loggedInUserDetails);
@@ -44,7 +45,7 @@ const Tweets = () => {
       }
     );
     setTweet("");
-    
+
     console.log(res.data);
     if (res.data.statusCode === 200) {
       console.log("inside if");
@@ -76,10 +77,9 @@ const Tweets = () => {
         tweet._id === editTweetId ? { ...tweet, content: tweetContent } : tweet
       )
     );
-
     setShowEditTweetForm(false);
 
-    await axios.patch(
+    const res = await axios.patch(
       `${BACKEND_URL_PREFIX}/tweets/update/${channelId}/${editTweetId}`,
       {
         content: tweetContent,
@@ -89,6 +89,11 @@ const Tweets = () => {
         headers: { "Content-Type": "application/json" },
       }
     );
+    if (res.data.statusCode === 200) {
+      toast("tweet edited successfully");
+    } else {
+      toast("tweet editing failed. Please try again.");
+    }
   };
 
   const handleDeleteTweet = async (tweetId) => {
@@ -97,12 +102,17 @@ const Tweets = () => {
       prevTweet.filter((tweet) => tweet._id !== tweetId)
     );
 
-    await axios.delete(
+    const res = await axios.delete(
       `${BACKEND_URL_PREFIX}/tweets/delete/${channelId}/${tweetId}`,
       {
         withCredentials: true,
       }
     );
+    if (res.data.statusCode === 200) {
+      toast("tweet deleted successfully");
+    } else {
+      toast("tweet deletion failed. Please try again.");
+    }
   };
 
   const handleToggleTweetLike = async (tweetId) => {
@@ -121,13 +131,18 @@ const Tweets = () => {
       )
     );
 
-    await axios.post(
+    const res = await axios.post(
       `${BACKEND_URL_PREFIX}/likes/toggleTweetLike/${tweetId}`,
       {},
       {
         withCredentials: true,
       }
     );
+    if (res.data.statusCode === 200) {
+      toast(res.data.message);
+    } else {
+      toast("Toggling like failed");
+    }
   };
 
   if (!tweets) {
@@ -218,7 +233,7 @@ const Tweets = () => {
               <div className="flex items-center">
                 <span className="mr-1">{tweet.likesCount}</span>
                 <span onClick={() => handleToggleTweetLike(tweet._id)}>
-                {tweet.isLiked ? <BiSolidLike /> : <BiLike />}
+                  {tweet.isLiked ? <BiSolidLike /> : <BiLike />}
                 </span>
               </div>
             </div>
