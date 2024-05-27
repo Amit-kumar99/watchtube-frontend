@@ -56,6 +56,7 @@ const LikedVideos = () => {
                 className="w-56 h-40 rounded-lg"
                 src={video.likedVideos[0].thumbnail}
                 alt="thumbnail"
+                loading="lazy"
               />
             </div>
           </div>

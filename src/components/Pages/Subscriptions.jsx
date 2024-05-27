@@ -44,6 +44,7 @@ const Subscriptions = () => {
                 className="w-10 h-10 rounded-full mr-3"
                 src={subscription.channels[0].avatar}
                 alt="avatar"
+                loading="lazy"
               />
             </div>
             <div>{subscription.channels[0].username}</div>

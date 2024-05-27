@@ -189,6 +189,7 @@ const Tweets = () => {
           className="w-10 h-10 rounded-full mx-3"
           src={user.avatar}
           alt="avatar"
+          loading="lazy"
         />
         <input
           className="border w-11/12 p-2 mr-2 bg-black bg-opacity-0 rounded-md"
@@ -217,6 +218,7 @@ const Tweets = () => {
               <img
                 className="w-10 h-10 rounded-full"
                 src={tweet.owner[0].avatar}
+                loading="lazy"
               />
             </div>
 

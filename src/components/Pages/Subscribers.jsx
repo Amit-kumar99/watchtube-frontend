@@ -44,6 +44,7 @@ const Subscribers = () => {
                 className="w-10 h-10 rounded-full mr-3"
                 src={subscriber.subscribers[0].avatar}
                 alt="avatar"
+                loading="lazy"
               />
             </div>
             <div>{subscriber.subscribers[0].username}</div>

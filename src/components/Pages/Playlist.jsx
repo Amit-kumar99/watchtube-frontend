@@ -76,6 +76,7 @@ const Playlist = () => {
                   className="w-56 h-40 rounded-lg"
                   src={video.thumbnail}
                   alt="thumbnail"
+                  loading="lazy"
                 />
               </div>
             </div>

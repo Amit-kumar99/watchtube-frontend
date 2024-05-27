@@ -208,6 +208,7 @@ const Videos = () => {
               className="w-full h-64"
               src={video.thumbnail}
               alt="thumbnail"
+              loading="lazy"
             />
           </div>
           <div className="font-semibold mt-1">{video.title}</div>

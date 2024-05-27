@@ -1,4 +1,4 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import "./index.css";
@@ -6,12 +6,14 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Home from "./components/Pages/Home.jsx";
 import Auth from "./components/Pages/Auth.jsx";
 import Watch from "./components/Pages/Watch.jsx";
-import Channel from "./components/Pages/Channel.jsx";
+// Lazy load the Channel component
+const Channel = lazy(() => import("./components/Pages/Channel.jsx"));
 import Videos from "./components/Pages/Videos.jsx";
 import Playlists from "./components/Pages/Playlists.jsx";
 import Tweets from "./components/Pages/Tweets.jsx";
 import History from "./components/Pages/History.jsx";
-import Comments from "./components/Pages/Comments.jsx";
+// Lazy load the Comments component
+const Comments = lazy(() => import("./components/Pages/Comments.jsx"));
 import Subscribers from "./components/Pages/Subscribers.jsx";
 import Subscriptions from "./components/Pages/Subscriptions.jsx";
 import LikedVideos from "./components/Pages/LikedVideos.jsx";
@@ -62,7 +64,11 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "/channel/:channelId",
-        element: <Channel />,
+        element: (
+          <Suspense fallback={<div>Loading Channel...</div>}>
+            <Channel />
+          </Suspense>
+        ),
         children: [
           {
             path: "/channel/:channelId",
@@ -98,7 +104,11 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "/comments",
-        element: <Comments />,
+        element: (
+          <Suspense fallback={<div>Loading Comments...</div>}>
+            <Comments />
+          </Suspense>
+        ),
       },
     ],
   },

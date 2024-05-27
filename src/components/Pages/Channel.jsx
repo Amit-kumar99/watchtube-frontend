@@ -50,7 +50,12 @@ const Channel = () => {
   return (
     <div className="w-full mx-10">
       <div>
-        <img className="w-full h-44" src={channel.coverImage} alt="avatar" />
+        <img
+          className="w-full h-44"
+          src={channel.coverImage}
+          alt="avatar"
+          loading="lazy"
+        />
       </div>
 
       <div className="flex my-5">
@@ -59,6 +64,7 @@ const Channel = () => {
             className="w-44 h-44 rounded-full"
             src={channel.avatar}
             alt="avatar"
+            loading="lazy"
           />
         </div>
         <div className="flex flex-col justify-between py-2">

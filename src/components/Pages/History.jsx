@@ -46,6 +46,7 @@ const History = () => {
                     className="w-full h-40 rounded-lg"
                     src={video.thumbnail}
                     alt="thumbnail"
+                    loading="lazy"
                   />
                 </div>
               </div>
