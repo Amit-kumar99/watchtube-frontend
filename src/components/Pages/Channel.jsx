@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import fetchChannelDetails from "../../helpers/getChannelDetails.js";
 import axios from "axios";
 import { BACKEND_URL_PREFIX } from "../../constants";
+import ShimmerChannel from "./ShimmerChannel.jsx";
 
 const Channel = () => {
   const user = useSelector((store) => store.user.loggedInUserDetails);
@@ -22,7 +23,7 @@ const Channel = () => {
   }, [channelId]);
 
   if (!channel) {
-    return "loading...";
+    return <ShimmerChannel />
   }
 
   const handleToggleSubscription = async () => {

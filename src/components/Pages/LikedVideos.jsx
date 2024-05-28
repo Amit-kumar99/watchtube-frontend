@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import convertDuration from "../../helpers/convertDuration";
 import timeDifference from "../../helpers/timeDifference";
 import convertViews from "../../helpers/convertViews";
+import ShimmerLikedVideos from "./ShimmerLikedVideos";
 
 const LikedVideos = () => {
   const [likedVideos, setLikedVideos] = useState(null);
@@ -29,7 +30,7 @@ const LikedVideos = () => {
   }, []);
 
   if (!likedVideos) {
-    return "loading...";
+    return <ShimmerLikedVideos />;
   }
 
   return (

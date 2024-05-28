@@ -4,9 +4,10 @@ import { BACKEND_URL_PREFIX } from "../../constants";
 import { Link } from "react-router-dom";
 import convertDuration from "../../helpers/convertDuration";
 import convertViews from "../../helpers/convertViews";
+import ShimmerHistory from "./ShimmerHistory";
 
 const History = () => {
-  const [watchedVideos, setWatchedVideos] = useState(null);
+  const [watchedVideos, setWatchedVideos] = useState([]);
 
   if (!localStorage.getItem("isLoggedIn")) {
     return "Please log in to see your history";
@@ -26,8 +27,8 @@ const History = () => {
     fetchWatchedVideos();
   }, []);
 
-  if (!watchedVideos) {
-    return "loading...";
+  if (watchedVideos.length === 0) {
+    return <ShimmerHistory />;
   }
 
   return (

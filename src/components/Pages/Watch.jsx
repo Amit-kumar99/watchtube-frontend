@@ -23,6 +23,10 @@ const Watch = () => {
   const [showPlaylists, setShowPlaylists] = useState(false);
   const [playlistName, setPlaylistName] = useState("");
   const [showNewPlaylistForm, setShowNewPlaylistForm] = useState(false);
+  
+  if (!localStorage.getItem("isLoggedIn")) {
+    return "Please log in to watch videos";
+  }
 
   const fetchVideo = async () => {
     const res = await axios.get(`${BACKEND_URL_PREFIX}/videos/${videoId}`, {

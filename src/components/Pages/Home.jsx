@@ -5,6 +5,7 @@ import timeDifference from "../../helpers/timeDifference";
 import convertDuration from "../../helpers/convertDuration";
 import convertViews from "../../helpers/convertViews";
 import axios from "axios";
+import ShimmerHome from "./ShimmerHome";
 
 const Home = () => {
   const [videos, setVideos] = useState([]);
@@ -19,7 +20,7 @@ const Home = () => {
   }, []);
 
   if (videos.length === 0) {
-    return <div>loading...</div>;
+    return <ShimmerHome/>;
   }
 
   return (
