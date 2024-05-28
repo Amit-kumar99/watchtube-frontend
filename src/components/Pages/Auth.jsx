@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { login } from "../../store/userSlice";
+import { validateSignin, validateSignup } from "../../helpers/validations";
 
 const Auth = () => {
   const dispatch = useDispatch();
@@ -18,8 +19,14 @@ const Auth = () => {
   const [coverImageUrl, setCoverImageUrl] = useState("");
   const [coverImage, setCoverImage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [validationErrors, setValidationErrors] = useState({});
 
   const handleSignin = async () => {
+    setValidationErrors(validateSignin(username, password));
+    if (Object.keys(validationErrors).length !== 0) {
+      return;
+    }
+
     const res = await axios.post(
       `${BACKEND_URL_PREFIX}/users/login`,
       {
@@ -41,6 +48,14 @@ const Auth = () => {
   };
 
   const handleSignup = async () => {
+    setValidationErrors(
+      validateSignup(fullName, username, email, password, avatarUrl)
+    );
+    console.log(validationErrors);
+    if (Object.keys(validationErrors).length !== 0) {
+      return;
+    }
+
     const formData = new FormData();
     formData.append("fullName", fullName);
     formData.append("username", username);
@@ -139,15 +154,23 @@ const Auth = () => {
           />
         </div>
       )}
+      {validationErrors?.avatar && (
+        <div className="text-red-500">{validationErrors.avatar}</div>
+      )}
 
       {!isSigninForm && (
-        <input
-          type="text"
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
-          placeholder="full name"
-          className="p-3 my-2 w-full bg-gray-900 text-white"
-        />
+        <div>
+          <input
+            type="text"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+            placeholder="full name"
+            className="p-3 my-2 w-full bg-gray-900 text-white"
+          />
+          {validationErrors?.fullName && (
+            <div className="text-red-500">{validationErrors.fullName}</div>
+          )}
+        </div>
       )}
 
       <input
@@ -157,15 +180,23 @@ const Auth = () => {
         placeholder="username"
         className="p-3 my-2 w-full bg-gray-900 text-white"
       />
+      {validationErrors?.username && (
+        <div className="text-red-500">{validationErrors.username}</div>
+      )}
 
       {!isSigninForm && (
-        <input
-          type="text"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="email address"
-          className="p-3 my-2 w-full bg-gray-900 text-white"
-        />
+        <div>
+          <input
+            type="text"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="email address"
+            className="p-3 my-2 w-full bg-gray-900 text-white"
+          />
+          {validationErrors?.email && (
+            <div className="text-red-500">{validationErrors.email}</div>
+          )}
+        </div>
       )}
 
       <input
@@ -175,6 +206,9 @@ const Auth = () => {
         placeholder="password"
         className="p-3 my-2 w-full bg-gray-900 text-white"
       />
+      {validationErrors?.password && (
+        <div className="text-red-500">{validationErrors.password}</div>
+      )}
       <input
         type="checkbox"
         id="show-password"
@@ -183,7 +217,7 @@ const Auth = () => {
       <label className="text-white ml-1" htmlFor="show-password">
         {!showPassword ? "Show Password" : "Hide Password"}
       </label>
-      {/* <p className="text-red-500">{errorMessage}</p> */}
+
       {isSigninForm && (
         <button
           className="p-3 my-6 bg-blue-700 text-white w-full"
@@ -209,7 +243,10 @@ const Auth = () => {
           </span>
           <span
             className="font-semibold text-white cursor-pointer hover:text-blue-700"
-            onClick={() => setIsSigninForm(!isSigninForm)}
+            onClick={() => {
+              setIsSigninForm(!isSigninForm);
+              setValidationErrors({});
+            }}
           >
             {isSigninForm ? "Create Account" : " Sign in now"}
           </span>
