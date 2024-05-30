@@ -24,11 +24,13 @@ import CustomizeChannel from "./components/Pages/CustomizeChannel.jsx";
 import PersonalDetails from "./components/Pages/PersonalDetails.jsx";
 import ChangePassword from "./components/Pages/ChangePassword.jsx";
 import Content from "./components/Pages/Content.jsx";
+import ErrorPage from "./components/Pages/ErrorPage.jsx";
 
 const appRouter = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: "/",
