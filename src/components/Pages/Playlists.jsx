@@ -138,7 +138,7 @@ const Playlists = () => {
       {playlists.map((playlist) => (
         <div
           key={playlist._id}
-          className="border border-gray-500 p-2 w-3/12 mr-5 mb-3"
+          className="border border-gray-500 p-2 w-3/12 mr-5 my-2"
         >
           <div className="font-semibold mt-1">{playlist.name}</div>
           <div className="mr-2">{playlist.videosCount} videos</div>

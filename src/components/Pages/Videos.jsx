@@ -198,7 +198,7 @@ const Videos = () => {
         <Link
           to={`/watch?v=${video._id}`}
           key={video._id}
-          className="w-3/12 mr-5"
+          className="w-3/12 mr-5 my-2"
         >
           <div className="absolute bg-black text-white py-1 px-2 rounded-md">
             {convertDuration(Math.floor(video.duration))}

@@ -279,9 +279,9 @@ const Watch = () => {
   }
 
   return (
-    <div className="w-[50vw] h-[90vh] overflow-y-scroll px-2">
+    <div className="w-[55vw] h-[90vh] overflow-y-scroll px-2">
       <div className="w-full">
-        <ReactPlayer url={video.videoFile} width="830px" controls={true} />
+        <ReactPlayer url={video.videoFile} width="900px" controls={true} />
 
         <div>
           <div className="font-semibold text-xl my-2">{video.title}</div>
