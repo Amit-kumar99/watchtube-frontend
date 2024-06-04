@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { BACKEND_URL_PREFIX } from "../../constants";
 import axios from "axios";
+import ShimmerChannel from "./ShimmerChannel";
 
 const CustomizeChannel = () => {
   if (!localStorage.getItem("isLoggedIn")) {
@@ -48,7 +49,7 @@ const CustomizeChannel = () => {
   }, [channelId]);
 
   if (!channel) {
-    return "loading...";
+    return <ShimmerChannel />
   }
 
   const handleCoverImageChange = (e) => {
@@ -122,7 +123,7 @@ const CustomizeChannel = () => {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full mx-10">
       <div
         className="absolute mt-5 ml-10 cursor-pointer bg-gray-500 p-1 rounded-md"
         onClick={() => setShowUploadCoverImagePopup(true)}
@@ -140,7 +141,7 @@ const CustomizeChannel = () => {
       {/* upload cover Image popup */}
       {showUploadCoverImagePopup && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
-          <div className="bg-white p-8 rounded shadow-lg w-3/12 flex flex-col">
+          <div className="bg-black p-8 rounded shadow-lg w-3/12 flex flex-col">
             <button
               className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4"
               onClick={() => {
@@ -183,7 +184,7 @@ const CustomizeChannel = () => {
         </div>
       )}
 
-      <div className="flex border mt-2">
+      <div className="flex mt-2">
         <div
           className="absolute mt-5 ml-10 cursor-pointer bg-gray-500 p-1 rounded-md"
           onClick={() => setShowUploadAvatarPopup(true)}
@@ -201,7 +202,7 @@ const CustomizeChannel = () => {
         {/* Upload avatar popup */}
         {showUploadAvatarPopup && (
           <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
-            <div className="bg-white p-8 rounded shadow-lg w-3/12 flex flex-col">
+            <div className="bg-black p-8 rounded shadow-lg w-2/12 flex flex-col">
               <button
                 className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4"
                 onClick={() => {
@@ -222,7 +223,7 @@ const CustomizeChannel = () => {
               >
                 <label
                   htmlFor="avatar"
-                  className="w-full h-44 font-semibold text-blue-700 text-xl ml-52 p-1 hover:bg-white cursor-pointer rounded-md"
+                  className="w-full h-44 font-semibold text-blue-700 text-xl ml-20 p-1 hover:bg-white cursor-pointer rounded-md"
                 >
                   + Avatar
                 </label>
@@ -263,7 +264,7 @@ const CustomizeChannel = () => {
         </div>
       </div>
 
-      <div className="border mt-3 p-2 font-semibold text-lg mx-auto">
+      <div className="border-b mt-3 p-2 font-semibold text-lg mx-auto">
         <Link
           className={
             "py-2 mr-5 hover:border-b-2 hover:border-white " +

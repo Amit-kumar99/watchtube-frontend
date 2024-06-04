@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { BACKEND_URL_PREFIX } from "../../constants";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const PersonalDetails = () => {
   const user = useSelector((store) => store.user.loggedInUserDetails);
@@ -27,7 +28,7 @@ const PersonalDetails = () => {
     );
 
     if (res.data.statusCode === 200) {
-      alert("Personal Info Updated successfully");
+      toast("Personal Info Updated successfully");
     }
   };
 

@@ -2,15 +2,17 @@ import { useState } from "react";
 import useLogout from "../../customHooks/useLogout";
 import axios from "axios";
 import { BACKEND_URL_PREFIX } from "../../constants";
+import { toast } from "react-toastify";
 
 const ChangePassword = () => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [error, setError] = useState(null);
   const logout = useLogout();
 
   const handleChangePassword = async () => {
     if (!oldPassword?.trim() || !newPassword?.trim()) {
-      alert("all fields required");
+      setError("all fields required");
       return ;
     }
     const res = await axios.patch(
@@ -26,7 +28,7 @@ const ChangePassword = () => {
     );
 
     if (res.data.statusCode === 200) {
-      alert("Password updated successfully");
+      toast("Password updated successfully");
       //logout user
       logout();
     }
@@ -57,7 +59,8 @@ const ChangePassword = () => {
           placeholder="New password"
         />
       </div>
-      <div className="w-full flex">
+      <div className="text-red-500 -mt-3">{error}</div>
+      <div className="w-full flex pt-3">
         <button className="py-2 bg-blue-700 text-white mx-auto w-7/12 font-semibold text-lg"
         onClick={handleChangePassword}>
           Change Password
