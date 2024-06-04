@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import convertDuration from "../../helpers/convertDuration";
 import timeDifference from "../../helpers/timeDifference";
 import convertViews from "../../helpers/convertViews";
-import ShimmerLikedVideos from "./ShimmerLikedVideos";
 
 const LikedVideos = () => {
   const [likedVideos, setLikedVideos] = useState(null);
@@ -30,7 +29,25 @@ const LikedVideos = () => {
   }, []);
 
   if (!likedVideos) {
-    return <ShimmerLikedVideos />;
+    return (
+      <div className="mb-2 mx-5 w-full">
+        <div className="my-5">
+          <h1 className="text-4xl mb-2">Liked Videos</h1>
+        </div>
+        loading...
+      </div>
+    );
+  }
+
+  if (likedVideos.length === 0) {
+    return (
+      <div className="mb-2 mx-5 w-full">
+        <div className="my-5">
+          <h1 className="text-4xl mb-2">Liked Videos</h1>
+        </div>
+        <div>You have no liked videos.</div>
+      </div>
+    );
   }
 
   return (
@@ -66,10 +83,15 @@ const LikedVideos = () => {
               {video.likedVideos[0].title}
             </div>
             <div className="flex mt-2">
-              <Link to={`/channel/${video.likedVideos[0].owner[0]._id}`} className="mr-2 font-semibold text-gray-400 hover:text-gray-300">
+              <Link
+                to={`/channel/${video.likedVideos[0].owner[0]._id}`}
+                className="mr-2 font-semibold text-gray-400 hover:text-gray-300"
+              >
                 {video.likedVideos[0].owner[0].username} .
               </Link>
-              <div className="mr-2">{convertViews(video.likedVideos[0].views)} views .</div>
+              <div className="mr-2">
+                {convertViews(video.likedVideos[0].views)} views .
+              </div>
               <div>{timeDifference(video.likedVideos[0].createdAt)} ago</div>
             </div>
           </div>
