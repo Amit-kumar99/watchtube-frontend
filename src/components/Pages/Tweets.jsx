@@ -181,7 +181,8 @@ const Tweets = () => {
       )}
 
       {/* create tweet form */}
-      <form
+      { user._id === tweets[0].owner[0]._id && 
+      (<form
         className="w-10/12 flex py-5 my-5"
         onSubmit={(e) => e.preventDefault()}
       >
@@ -204,7 +205,7 @@ const Tweets = () => {
         >
           Tweet
         </button>
-      </form>
+      </form>)}
 
       {tweets.length === 0 && "No tweets available"}
 
@@ -234,7 +235,7 @@ const Tweets = () => {
 
               <div className="flex items-center">
                 <span className="mr-1">{tweet.likesCount}</span>
-                <span onClick={() => handleToggleTweetLike(tweet._id)}>
+                <span className="cursor-pointer" onClick={() => handleToggleTweetLike(tweet._id)}>
                   {tweet.isLiked ? <BiSolidLike /> : <BiLike />}
                 </span>
               </div>
