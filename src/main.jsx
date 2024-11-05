@@ -25,6 +25,7 @@ import PersonalDetails from "./components/Pages/PersonalDetails.jsx";
 import ChangePassword from "./components/Pages/ChangePassword.jsx";
 import Content from "./components/Pages/Content.jsx";
 import ErrorPage from "./components/Pages/ErrorPage.jsx";
+import Premium from "./components/Pages/Premium.jsx";
 
 const appRouter = createBrowserRouter([
   {
@@ -39,6 +40,10 @@ const appRouter = createBrowserRouter([
       {
         path: "/auth",
         element: <Auth />,
+      },
+      {
+        path: "/buy-premium",
+        element: <Premium />,
       },
       {
         path: "/content",

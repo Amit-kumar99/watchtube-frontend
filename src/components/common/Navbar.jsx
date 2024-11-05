@@ -21,10 +21,28 @@ const Navbar = () => {
         >
           <img className="w-7" src={toggleIcon} alt="toggle-img" />
         </button>
+       
         <Link to="/">
-          <img className="w-10 h-10" src={logo} alt="watchtube-logo" />
+          <div className="flex">
+            <img className="w-10 h-10" src={logo} alt="watchtube-logo" />
+            <span className="ml-2 text-3xl font-semibold">
+              { ( !user || (user && user?.isPremium === false) ) ? "WatchTube" : "Premium" }
+            </span>
+          </div>
         </Link>
       </div>
+
+      <div className="mr-5">
+        {(user && (user.isPremium === false)) && (
+          <Link
+            to="/buy-premium"
+            className="inline-block font-bold text-blue-700 text-base transform transition-transform duration-200 hover:scale-110"
+          >
+            BUY PREMIUM
+          </Link>
+        )}
+      </div>
+
       <div className="mr-5">
         {user ? (
           <Link to={`/channel/${user._id}`}>
