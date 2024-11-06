@@ -7,12 +7,13 @@ import {
   PREMIUM_PRICE,
 } from "../../constants";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import PremiumSuccessPopup from "../PremiumSuccessPopup";
 
 const Premium = () => {
-  const navigate = useNavigate();
-
   const user = useSelector((store) => store.user.loggedInUserDetails);
+  const [showPaymentSuccessPopup, setShowPaymentSuccessPopup] = useState(false);
+  const [paymentStatus, setPaymentStatus] = useState("");
 
   if (!localStorage.getItem("isLoggedIn")) {
     return "Please log in to buy premium";
@@ -42,6 +43,7 @@ const Premium = () => {
       description: "Test Transaction",
       order_id: order.data.data.id,
       handler: async function (response) {
+        setPaymentStatus("pending");
         // Send payment confirmation to the backend
         const res = await axios.post(
           `${BACKEND_URL_PREFIX}/payments/confirmPayment`,
@@ -59,11 +61,13 @@ const Premium = () => {
         );
 
         if (res.data.statusCode === 200) {
-          alert("1 month Premium bought");
-          navigate("/");
-        } else {
-          alert("Transaction failed. Please try again");
+          setPaymentStatus("captured");
+          setShowPaymentSuccessPopup(true);
+          setTimeout(() => {
+            window.location.href = "/";
+          }, 2000);
         }
+        //razorpay shows payment failure UI, therefore not included the failure scenario notification.
       },
       prefill: {
         name: user?.fullName,
@@ -80,23 +84,34 @@ const Premium = () => {
   };
 
   return (
-    <div className="mx-auto flex flex-col justify-center h-screen">
-      <div className="mx-auto mb-10 text-3xl font-semibold">
-        <img
-          className="w-10 h-10 inline-block mr-2 mb-1"
-          src={logo}
-          alt="watchtube-logo"
-        />
-        <span>Watchtube Premium</span>
-      </div>
-      <div className="mx-auto mb-5 text-5xl font-bold">All WatchTube.</div>
-      <div className="mx-auto mb-10 text-5xl font-bold">No Ads.</div>
-      <button
-        className="mx-auto border-4 border-black text-lg font-semibold p-3 hover:bg-black"
-        onClick={handlePayment}
-      >
-        Buy Premium
-      </button>
+    <div className="mx-auto">
+      {paymentStatus === "pending" && (
+        <div className="text-blue-700 font-semibold">
+          Activating your Premium access...
+        </div>
+      )}
+      {!showPaymentSuccessPopup ? (
+        <div className="flex flex-col justify-center h-screen">
+          <div className="mx-auto mb-10 text-3xl font-semibold">
+            <img
+              className="w-10 h-10 inline-block mr-2 mb-1"
+              src={logo}
+              alt="watchtube-logo"
+            />
+            <span>Watchtube Premium</span>
+          </div>
+          <div className="mx-auto mb-5 text-5xl font-bold">All WatchTube.</div>
+          <div className="mx-auto mb-10 text-5xl font-bold">No Ads.</div>
+          <button
+            className="mx-auto border-4 border-black text-lg font-semibold p-3 hover:bg-black"
+            onClick={handlePayment}
+          >
+            Buy Premium
+          </button>
+        </div>
+      ) : (
+        <PremiumSuccessPopup />
+      )}
     </div>
   );
 };
