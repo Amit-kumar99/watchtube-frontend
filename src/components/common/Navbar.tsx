@@ -49,28 +49,6 @@ const Navbar = () => {
         </Link>
       </div>
 
-      <div className="w-[40%] ml-[-33px] border border-gray-500 z-10">
-        <input
-          type="text"
-          className="py-2 px-4 bg-black outline-none w-[100%]"
-          placeholder="Search"
-          onFocus={() => setShowSuggestions(true)}
-          onBlur={() => setShowSuggestions(false)}
-          onChange={(e) => setSearchText(e.target.value)}
-        />
-        {showSuggestions && (
-          <div className="w-[40%] absolute mt-3 px-5 bg-black">
-            {videos
-              .filter((item) =>
-                item.title.toLowerCase().includes(searchText.toLowerCase())
-              )
-              .map((item) => (
-                <div className="py-1">{item.title}</div>
-              ))}
-          </div>
-        )}
-      </div>
-
       <div className="mr-5">
         {(user && (user.isPremium === false)) && (
           <Link
