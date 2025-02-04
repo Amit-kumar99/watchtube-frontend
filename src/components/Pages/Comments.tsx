@@ -40,8 +40,8 @@ const Comments = () => {
   }
 
   return (
-    <div className="w-4/12 mx-auto">
-      <h1 className="text-4xl my-5 mx-auto w-9/12">Your Comments History</h1>
+    <div className="w-5/12 mx-auto">
+      <h1 className="text-4xl my-5 mx-auto w-11/12 text-center">Comments History</h1>
       <div className="w-full">
         {comments.map((comment) => (
           <div key={comment._id} className="mb-5 w-full">

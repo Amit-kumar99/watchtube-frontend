@@ -1,14 +1,22 @@
-const validateEmail = (email) => {
+export interface ValidationErrors {
+  fullName?: string;
+  username?: string;
+  email?: string;
+  password?: string;
+  avatar?: string;
+}
+
+const validateEmail = (email: string) => {
   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return regex.test(String(email).toLowerCase()) ? "" : "Invalid email format.";
 };
 
-const validateRequired = (value, fieldName) => {
+const validateRequired = (value: string, fieldName: string) => {
   return value?.trim() === "" ? `${fieldName} is required.` : "";
 };
 
-export const validateSignin = (username, password) => {
-  const errors = {};
+export const validateSignin = (username: string, password: string) => {
+  const errors: ValidationErrors = {};
   const usernameRequiredError = validateRequired(username, "Username");
   if (usernameRequiredError !== "") {
     errors.username = usernameRequiredError;
@@ -21,13 +29,13 @@ export const validateSignin = (username, password) => {
 };
 
 export const validateSignup = (
-  fullName,
-  username,
-  email,
-  password,
-  avatar
+  fullName: string,
+  username: string,
+  email: string,
+  password: string,
+  avatar: string
 ) => {
-  const errors = {};
+  const errors: ValidationErrors = {};
   const fullNameRequiredError = validateRequired(fullName, "Fullname");
   if (fullNameRequiredError !== "") {
     errors.fullName = fullNameRequiredError;

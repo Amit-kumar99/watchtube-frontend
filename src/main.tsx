@@ -1,31 +1,31 @@
 import React, { lazy, Suspense } from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.jsx";
+import App from "./App";
 import "./index.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import Home from "./components/Pages/Home.jsx";
-import Auth from "./components/Pages/Auth.jsx";
-import Watch from "./components/Pages/Watch.jsx";
+import Home from "./components/Pages/Home";
+import Auth from "./components/Pages/Auth";
+import Watch from "./components/Pages/Watch";
 // Lazy load the Channel component
-const Channel = lazy(() => import("./components/Pages/Channel.jsx"));
-import Videos from "./components/Pages/Videos.jsx";
-import Playlists from "./components/Pages/Playlists.jsx";
-import Tweets from "./components/Pages/Tweets.jsx";
-import History from "./components/Pages/History.jsx";
+const Channel = lazy(() => import("./components/Pages/Channel"));
+import Videos from "./components/Pages/Videos";
+import Playlists from "./components/Pages/Playlists";
+import Tweets from "./components/Pages/Tweets";
+import History from "./components/Pages/History";
 // Lazy load the Comments component
-const Comments = lazy(() => import("./components/Pages/Comments.jsx"));
-import Subscribers from "./components/Pages/Subscribers.jsx";
-import Subscriptions from "./components/Pages/Subscriptions.jsx";
-import LikedVideos from "./components/Pages/LikedVideos.jsx";
+const Comments = lazy(() => import("./components/Pages/Comments"));
+import Subscribers from "./components/Pages/Subscribers";
+import Subscriptions from "./components/Pages/Subscriptions";
+import LikedVideos from "./components/Pages/LikedVideos";
 import { Provider } from "react-redux";
-import store from "./store/store.js";
-import Playlist from "./components/Pages/Playlist.jsx";
-import CustomizeChannel from "./components/Pages/CustomizeChannel.jsx";
-import PersonalDetails from "./components/Pages/PersonalDetails.jsx";
-import ChangePassword from "./components/Pages/ChangePassword.jsx";
-import Content from "./components/Pages/Content.jsx";
-import ErrorPage from "./components/Pages/ErrorPage.jsx";
-import Premium from "./components/Pages/Premium.jsx";
+import store from "./store/store";
+import Playlist from "./components/Pages/Playlist";
+import CustomizeChannel from "./components/Pages/CustomizeChannel";
+import PersonalDetails from "./components/Pages/PersonalDetails";
+import ChangePassword from "./components/Pages/ChangePassword";
+import Content from "./components/Pages/Content";
+import ErrorPage from "./components/Pages/ErrorPage";
+import Premium from "./components/Pages/Premium";
 
 const appRouter = createBrowserRouter([
   {
@@ -121,12 +121,8 @@ const appRouter = createBrowserRouter([
   },
 ]);
 
-ReactDOM.createRoot(document.getElementById("root")).render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
-    <RouterProvider router={appRouter}>
-      <React.StrictMode>
-        <App />
-      </React.StrictMode>
-    </RouterProvider>
+    <RouterProvider router={appRouter} />
   </Provider>
 );

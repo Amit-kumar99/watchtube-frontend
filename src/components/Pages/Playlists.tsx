@@ -104,11 +104,11 @@ const Playlists = () => {
   }
 
   return (
-    <div className="flex flex-wrap mb-3">
+    <div className="flex flex-wrap justify-between gap-y-4 my-3">
       {/* edit Playlist form */}
       {showEditPlaylistForm && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
-          <div className="bg-black p-5 rounded shadow-lg w-3/12">
+          <div className="bg-black p-5 rounded shadow-lg w-4/12">
             <button
               className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4 mx-5"
               onClick={() => {
@@ -138,7 +138,7 @@ const Playlists = () => {
       {playlists.map((playlist) => (
         <div
           key={playlist._id}
-          className="border border-gray-500 p-2 w-3/12 mr-5 my-2"
+          className="border border-gray-500 p-2 w-[32%]"
         >
           <div className="font-semibold mt-1">{playlist.name}</div>
           <div className="mr-2">{playlist.videosCount} videos</div>

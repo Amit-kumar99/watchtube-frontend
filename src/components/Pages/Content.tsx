@@ -63,7 +63,7 @@ const Content = () => {
   return (
     <div className="w-full mx-5">
       <form
-        className="border border-gray-500 rounded-md w-4/12 mx-auto mt-10 flex flex-col p-10"
+        className="border border-gray-500 rounded-md w-5/12 mx-auto mt-10 flex flex-col p-10"
         onSubmit={(e) => e.preventDefault()}
       >
         <div className="py-7 my-2 w-full border border-blue-700">

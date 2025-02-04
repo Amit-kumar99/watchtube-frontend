@@ -213,7 +213,7 @@ const Tweets = () => {
         tweets.map((tweet) => (
           <div
             key={tweet._id}
-            className="border border-gray-500 w-8/12 flex p-5 rounded-md mb-5"
+            className="border border-gray-500 w-10/12 flex p-5 rounded-md mb-5"
           >
             <div className="mr-3">
               <img

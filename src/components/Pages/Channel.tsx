@@ -4,7 +4,7 @@ import { Link, Outlet, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import fetchChannelDetails from "../../helpers/getChannelDetails.js";
 import axios from "axios";
-import { BACKEND_URL_PREFIX } from "../../constants";
+import { BACKEND_URL_PREFIX } from "../../constants.js";
 import ShimmerChannel from "./ShimmerChannel.jsx";
 
 const Channel = () => {

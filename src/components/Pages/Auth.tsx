@@ -4,22 +4,24 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { login } from "../../store/userSlice";
-import { validateSignin, validateSignup } from "../../helpers/validations";
+import { validateSignin, validateSignup, ValidationErrors } from "../../helpers/validations";
 
-const Auth = () => {
+const Auth: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [isSigninForm, setIsSigninForm] = useState(true);
-  const [fullName, setFullName] = useState("");
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [avatarUrl, setAvatarUrl] = useState("");
-  const [avatar, setAvatar] = useState("");
-  const [coverImageUrl, setCoverImageUrl] = useState("");
-  const [coverImage, setCoverImage] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [validationErrors, setValidationErrors] = useState({});
+  const [isSigninForm, setIsSigninForm] = useState<boolean>(true);
+  const [fullName, setFullName] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [avatarUrl, setAvatarUrl] = useState<string>("");
+  // change default to null if possible
+  const [avatar, setAvatar] = useState<File | string>("");
+  const [coverImageUrl, setCoverImageUrl] = useState<string>("");
+  // change default to null if possible
+  const [coverImage, setCoverImage] = useState<File | string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [validationErrors, setValidationErrors] = useState<ValidationErrors>({});
 
   const handleSignin = async () => {
     setValidationErrors(validateSignin(username, password));
@@ -41,7 +43,7 @@ const Auth = () => {
       }
     );
     if (res.data.statusCode === 200) {
-      localStorage.setItem("isLoggedIn", true);
+      localStorage.setItem("isLoggedIn", "true");
       dispatch(login(res.data.data.user));
       navigate("/");
     }
@@ -74,26 +76,26 @@ const Auth = () => {
     }
   };
 
-  const handleAvatarChange = (e) => {
-    const avatarFile = e.target.files[0];
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const avatarFile = e.target.files?.[0];
     if (avatarFile) {
       const reader = new FileReader();
       reader.onloadend = () => {
         setAvatar(avatarFile);
-        setAvatarUrl(reader.result);
+        setAvatarUrl(reader?.result as string);
       };
       reader.readAsDataURL(avatarFile);
       console.log(avatar);
     }
   };
 
-  const handleCoverImageChange = (e) => {
-    const coverImageFile = e.target.files[0];
+  const handleCoverImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const coverImageFile = e.target.files?.[0];
     if (coverImageFile) {
       const reader = new FileReader();
       reader.onloadend = () => {
         setCoverImage(coverImageFile);
-        setCoverImageUrl(reader.result);
+        setCoverImageUrl(reader?.result as string);
       };
       reader.readAsDataURL(coverImageFile);
       console.log(coverImage);
